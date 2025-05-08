@@ -14,6 +14,7 @@ var indexRouter = require("./routers/index");
 var khuVucRouter = require("./routers/khuvuc");
 var sachRouter = require("./routers/sach");
 var taikhoanRouter = require("./routers/taikhoan");
+var gioHangRouter = require("./routers/giohang");
 
 var uri =
   "mongodb+srv://nhanlx151:nhan778899@cluster0.75thtei.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -24,6 +25,7 @@ app.use(
   "/uploads",
   express.static(path.join(__dirname, "middlewares/uploads"))
 );
+
 app.use("/js", express.static(path.join(__dirname, "js")));
 app.use("/css", express.static(path.join(__dirname, "CSS")));
 app.set("views", "./views");
@@ -70,9 +72,10 @@ app.use("/chude", chudeRouter);
 app.use("/khuvuc", khuVucRouter);
 app.use("/sach", sachRouter);
 app.use("/taikhoan", taikhoanRouter);
+app.use("/giohang", gioHangRouter);
 
 app.listen(3001, () => {
-  console.log("Server is running at http://127.0.0.1:3001");
+  console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3001");
 });
 
 // Xử lý trang chủ đề và sách

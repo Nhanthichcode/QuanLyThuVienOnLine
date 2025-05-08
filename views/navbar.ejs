@@ -57,18 +57,8 @@
               >
             </li>
             <li>
-              <a class="dropdown-item" href="/taikhoan"
-                ><i class="bi bi-people"></i> Tài khoản</a
-              >
-            </li>
-            <li>
               <a class="dropdown-item" href="/sach"
-                ><i class="bi bi-book"></i> Sách</a
-              >
-            </li>
-            <li>
-              <a class="dropdown-item" href="/baiviet"
-                ><i class="bi bi-file-earmark-richtext"></i> Bài viết</a
+                ><i class="bi bi-book"></i>Xem Sách</a
               >
             </li>
           </ul>
@@ -87,16 +77,14 @@
             <i class="bi bi-person"></i> <%= session.HoVaTen %>
           </a>
           <ul class="dropdown-menu">
+            <% if(session.QuyenHan == "admin") { %>
             <li>
-              <a class="dropdown-item" href="/sach/them"
-                ><i class="bi bi-file-earmark-plus"></i> Thêm sách</a
+              <a class="dropdown-item" href="/taikhoan"
+                ><i class="bi bi-house"></i> Trang quản lý</a
               >
+              <hr />
             </li>
-            <li>
-              <a class="dropdown-item" href="/sach"
-                ><i class="bi bi-journal-bookmark"></i> Danh sách Sách</a
-              >
-            </li>
+            <% } else { %> <% } %>
             <li>
               <a class="dropdown-item" href="/taikhoan/hoso"
                 ><i class="bi bi-person-badge"></i> Hồ sơ cá nhân</a
@@ -115,10 +103,24 @@
             </li>
           </ul>
         </li>
-        <% } %>
+        <% if(session.MaNguoiDung && session.QuyenHan != "admin") { %>
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="/giohang">
+            <!-- Biểu tượng giỏ hàng -->
+            <i class="bi bi-cart3 fs-5"></i>
+            <% if(session.gioHang && session.gioHang.length > 0) { %>
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              <%= session.gioHang.length %>
+            </span>
+            <% } %> Giỏ hàng của tôi</a
+          >
+        </li>
+        <% } %> <% } %>
       </ul>
       <!-- Form tìm kiếm -->
-      <form action="/timkiem" class="d-flex" role="search">
+      <form action="/timkiem" class="d-flex" method="POST" role="search">
         <input
           class="form-control me-2"
           type="search"

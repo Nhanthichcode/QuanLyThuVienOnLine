@@ -55,24 +55,6 @@ router.get("/sach/chitiet/:id", async (req, res) => {
   }
 });
 
-// GET: Sách mới nhất
-router.get("/tinmoi", async (req, res) => {
-  try {
-    var sachMoi = await Sach.find({ KiemDuyet: true })
-      .populate("ChuDe")
-      .sort({ NamXuatBan: -1 })
-      .exec();
-    res.render("tinmoinhat", {
-      title: "Sách Mới Nhất",
-      sach: sachMoi,
-      firstImage: firstImage,
-    });
-  } catch (error) {
-    console.error("Error loading new books:", error);
-    res.redirect("/error");
-  }
-});
-
 //GET Sách theo chủ đề
 router.get("/sach/chude/:id", async (req, res) => {
   try {
@@ -97,7 +79,6 @@ router.get("/sach/chude/:id", async (req, res) => {
       chude: cd,
       chuyenmuc: cm,
       xemnhieunhat: xnn,
-      firstImage: firstImage,
     });
   } catch (error) {
     console.error("Error loading books by category:", error);

@@ -5,6 +5,7 @@ var Sach = require("../models/sach");
 var ChuDe = require("../models/chude");
 var multer = require("multer");
 var path = require("path");
+var firstImage = require("../modules/firstimage");
 
 // Kiểm tra và tạo thư mục nếu chưa tồn tại
 var uploadDir = path.join(__dirname, "../middlewares/uploads");
@@ -42,7 +43,11 @@ var upload = multer({
 router.get("/", async (req, res) => {
   try {
     var sachs = await Sach.find().populate("ChuDe");
-    res.render("sach", { title: "Danh sách sách", sach: sachs });
+    res.render("sach", {
+      title: "Danh sách sách",
+      sach: sachs,
+      firstImage: firstImage,
+    });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách sách:", error);
     res.status(500).render("error", {
@@ -58,6 +63,7 @@ router.get("/them", async (req, res) => {
     res.render("sach_them", {
       title: "Thêm sách",
       chude: cd,
+      firstImage: firstImage,
     });
   } catch (error) {
     console.error("Lỗi khi lấy trang thêm sách:", error);
@@ -75,13 +81,14 @@ router.post("/them", upload.single("HinhAnh"), async (req, res) => {
       TieuDe: req.body.TieuDe,
       TomTat: req.body.TomTat,
       NoiDung: req.body.NoiDung,
-      HinhAnh: req.file ? req.file.filename : null, // Lưu tên file hình ảnh
+      HinhAnh: req.file ? req.file.filename : firstImage, // Lưu tên file hình ảnh
       NamXuatBan: req.body.NamXuatBan,
       NhaXuatBan: req.body.NhaXuatBan,
       TacGia: req.body.TacGia,
       DanhGia: req.body.DanhGia || 0,
       SoLuong: req.body.SoLuong || 1,
       NgonNgu: req.body.NgonNgu || "Tiếng Việt",
+      GiaBan: req.body.GiaBan || 10000, // Thêm trường Giá bán
       tags: req.body.tags
         ? req.body.tags.split(",").map((tag) => tag.trim())
         : [],
@@ -124,9 +131,7 @@ router.get("/xoa/:id", async (req, res) => {
 router.get("/sua/:id", async (req, res) => {
   try {
     var cd = await ChuDe.find();
-    var sach = await Sach.findById(req.params.id)
-      .populate("ChuDe")
-      .populate("TaiKhoan");
+    var sach = await Sach.findById(req.params.id).populate("ChuDe");
     if (!sach) {
       return res.status(404).render("error", {
         title: "Lỗi",
@@ -180,6 +185,7 @@ router.post("/sua/:id", upload.single("HinhAnh"), async (req, res) => {
     sach.TacGia = req.body.TacGia;
     sach.DanhGia = req.body.DanhGia || 0;
     sach.SoLuong = req.body.SoLuong || 1;
+    sach.GiaBan = req.body.GiaBan || 10000; // Thêm trường Giá bán
     sach.NgonNgu = req.body.NgonNgu || "Tiếng Việt";
     sach.tags = req.body.tags
       ? req.body.tags.split(",").map((tag) => tag.trim())
@@ -239,6 +245,8 @@ router.get("/sach_chitiet/:id", async (req, res) => {
       title: sachDetail.TieuDe, // Thêm tiêu đề trang
       chuyenmuc: cd,
       sachDetail: sachDetail,
+      firstImage: firstImage,
+      // Truyền hàm firstImage vào view
     });
   } catch (error) {
     console.error("Lỗi khi xem chi tiết sách:", error);

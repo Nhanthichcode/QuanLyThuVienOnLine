@@ -22,9 +22,54 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
       rel="stylesheet"
     />
+    <style>
+      /* Cài đặt cơ bản cho card trong danh sách sách */
+      .col-md-9 .card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+      }
+
+      /* Card container trong danh sách */
+      .col-md-9 .row .card {
+        opacity: 1;
+      }
+
+      /* Khi hover vào một card trong danh sách, làm mờ các card khác */
+      .col-md-9 .row:hover .card:not(:hover) {
+        opacity: 0.4;
+        transform: scale(0.98);
+      }
+
+      /* Hiệu ứng cho card đang được hover trong danh sách */
+      .col-md-9 .row .card:hover {
+        transform: translateY(-5px);
+        opacity: 1;
+        z-index: 1;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Các hiệu ứng phụ khác chỉ cho card trong danh sách */
+      .col-md-9 .card:hover .badge {
+        transform: scale(1.1);
+        background-color: #198754 !important;
+      }
+
+      .col-md-9 .card:hover .card-title {
+        color: #0d6efd;
+      }
+
+      .col-md-9 .add-to-cart {
+        transition: all 0.2s ease;
+      }
+
+      .col-md-9 .card:hover .add-to-cart {
+        transform: scale(1.05);
+      }
+    </style>
   </head>
 
   <body>
+    <a href="/giohang">Test giỏ hàng</a>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
       <div class="container">
@@ -46,7 +91,21 @@
             <li class="nav-item">
               <a class="nav-link" href="/dangnhap">Đăng nhập</a>
             </li>
-            <% } else { %>
+            <% } else { %> <% if(session.QuyenHan != "admin") { %>
+            <li class="nav-item">
+              <a class="nav-link position-relative" href="/giohang">
+                <i class="bi bi-cart3 fs-5"></i>
+                <% if(session.gioHang && session.gioHang.length > 0) { %>
+                <span
+                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                >
+                  <%= session.gioHang.length %>
+                </span>
+                <% } %> Giỏ hàng của tôi</a
+              >
+            </li>
+            <% } %>
+
             <li class="nav-item">
               <a class="nav-link" href="/admin">Quản lý</a>
             </li>
@@ -86,47 +145,68 @@
           <div class="row">
             <% if (sach && sach.length > 0) { %> <% sach.forEach(function(book)
             { %>
+            <!-- Card sách -->
             <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
               <div class="card h-100 shadow-sm">
-                <% if (book.HinhAnh) { %>
-                <img
-                  src="/uploads/<%= book.HinhAnh %>"
-                  class="card-img-top"
-                  alt="<%= book.TenSach %>"
-                  style="object-fit: cover; height: 160px"
-                />
-                <% } else { %>
-                <img
-                  src="/uploads/default.jpg"
-                  class="card-img-top"
-                  alt="No Image"
-                  style="object-fit: cover; height: 160px"
-                />
-                <% } %>
+                <!-- Hình ảnh sách -->
+                <div class="position-relative">
+                  <% if (book.HinhAnh) { %>
+                  <img
+                    src="/uploads/<%= book.HinhAnh %>"
+                    class="card-img-top"
+                    alt="<%= book.TieuDe %>"
+                    style="object-fit: cover; height: 200px"
+                  />
+                  <% } else { %>
+                  <img
+                    src="/uploads/default.jpg"
+                    class="card-img-top"
+                    alt="No Image"
+                    style="object-fit: cover; height: 200px"
+                  />
+                  <% } %>
+                  <!-- Badge giá -->
+                  <div class="position-absolute top-0 end-0 m-2">
+                    <span class="badge bg-success fs-6">
+                      <%= book.GiaBan.toLocaleString('vi-VN') %> đ
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Thông tin sách -->
                 <div class="card-body">
-                  <h5 class="card-title"><%= book.TieuDe %></h5>
-                  <p class="card-text">
-                    <span class="badge bg-primary"
-                      ><%= book.ChuDe ? book.ChuDe.TenChuDe : "Không xác định"
-                      %></span
-                    >
-                  </p>
+                  <h5 class="card-title text-truncate"><%= book.TieuDe %></h5>
                   <p class="card-text mb-1">
-                    <strong>Tác giả:</strong> <%= book.TacGia %>
+                    <small class="text-muted">
+                      <i class="bi bi-person"></i> <%= book.TacGia %>
+                    </small>
                   </p>
                   <p class="card-text">
-                    <strong>Năm XB:</strong>
-                    <% if (book.NamXuatBan) { %> <%= new
-                    Date(book.NamXuatBan).toLocaleDateString("vi-VN") %> <% }
-                    else { %> Chưa xác định <% } %>
+                    <small class="text-muted">
+                      <i class="bi bi-eye"></i> <%= book.LuotXem %> lượt xem
+                    </small>
                   </p>
                 </div>
-                <div class="card-footer text-center">
-                  <a
-                    href="/sach/sach_chitiet/<%= book._id %>"
-                    class="btn btn-primary btn-sm"
-                    >Chi tiết <i class="bi bi-chevron-right"></i
-                  ></a>
+
+                <!-- Footer với nút thêm vào giỏ hàng -->
+                <div class="card-footer bg-white border-top-0">
+                  <div
+                    class="d-flex justify-content-between align-items-center"
+                  >
+                    <a
+                      href="/sach/sach_chitiet/<%= book._id %>"
+                      class="btn btn-outline-primary btn-sm"
+                    >
+                      <i class="bi bi-info-circle"></i> Chi tiết
+                    </a>
+                    <button
+                      class="btn btn-success btn-sm add-to-cart"
+                      data-book-id="<%= book._id %>"
+                      title="Thêm vào giỏ hàng"
+                    >
+                      <i class="bi bi-cart-plus"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

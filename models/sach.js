@@ -17,6 +17,7 @@ const sachSchema = new mongoose.Schema({
   DanhGia: { type: Number, default: 0 }, // Thêm trường Đánh giá
   SoLuong: { type: Number, default: 1 }, // Thêm trường Số lượng
   NgonNgu: { type: String, default: "Tiếng Việt" }, // Thêm trường Ngôn ngữ
+  GiaBan: { type: Number, default: 0 }, // Thêm trường Giá bán
 });
 
 var sachModel = mongoose.model("Sach", sachSchema);
