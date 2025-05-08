@@ -1,0 +1,25 @@
+{
+  "name": "thuvienonline",
+  "version": "1.0.0",
+  "description": "Thư viện online NodeJS + MongoDB Atlas",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Lê Trí Nhàn & Đàm Thanh Phong",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "connect-redis": "^8.0.2",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "mongoose": "^8.12.1",
+    "multer": "^1.4.5-lts.2",
+    "nodemon": "^3.1.9",
+    "redis": "^4.7.0"
+  },
+  "keywords": [],
+  "type": "commonjs"
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <form
+      action="/sach/sua/<%= sach._id %>"
+      method="POST"
+      enctype="multipart/form-data"
+    >
+      <label for="TieuDe">Tiêu đề:</label>
+      <input
+        type="text"
+        id="TieuDe"
+        name="TieuDe"
+        value="<%= sach.TieuDe %>"
+        required
+      /><br />
+
+      <label for="HinhAnh">Hình ảnh:</label>
+      <input type="file" id="HinhAnh" name="HinhAnh" /><br />
+      <% if (sach.HinhAnh) { %>
+      <img
+        src="/uploads/<%= sach.HinhAnh %>"
+        alt="Hình ảnh"
+        width="100"
+      /><br />
+      <% } %>
+
+      <div class="mb-3">
+        <label for="MaChuDe" class="form-label">Chủ đề</label>
+        <select class="form-select" id="MaChuDe" name="MaChuDe" required>
+          <option value="">-- Chọn --</option>
+          <% chude.forEach(cd => { %> <% if(cd._id == sach.ChuDe.valueOf()) { %>
+          <option value="<%= cd._id %>" selected><%= cd.TenChuDe %></option>
+          <% } else { %>
+          <option value="<%= cd._id %>"><%= cd.TenChuDe %></option>
+          <% } %> <% }); %>
+        </select>
+      </div>
+
+      <label for="TomTat">Tóm tắt:</label>
+      <textarea id="TomTat" name="TomTat"><%= sach.TomTat %></textarea><br />
+
+      <button type="submit">Lưu thay đổi</button>
+    </form>
+  </body>
+</html>
