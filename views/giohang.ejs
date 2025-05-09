@@ -17,9 +17,32 @@
         width: 120px;
       }
       .book-image {
-        width: 100px;
-        height: 150px;
+        width: 90px;
+        height: 130px;
         object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #eee;
+      }
+      .cart-table th,
+      .cart-table td {
+        vertical-align: middle !important;
+        text-align: center;
+      }
+      .cart-table th {
+        background: #f8f9fa;
+      }
+      .cart-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
+      .cart-summary {
+        font-size: 1.1rem;
+        color: #555;
+      }
+      .input-group .input-group-text {
+        background: #f6f6f6;
+        font-weight: 500;
       }
     </style>
   </head>
@@ -27,131 +50,206 @@
     <%- include('navbar') %>
 
     <div class="container py-5">
-      <h1 class="mb-4"><i class="bi bi-cart3"></i> Giỏ hàng của tôi</h1>
-
-      <% if (taikhoan.GioHang && taikhoan.GioHang.length > 0) { %>
-      <div class="card">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table align-middle">
-              <thead>
-                <tr>
-                  <th>Sách</th>
-                  <th>Tên sách</th>
-                  <th>Giá</th>
-                  <th>Số lượng</th>
-                  <th>Thành tiền</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <% let tongTien = 0 %> <%
-                taikhoan.GioHang.forEach(function(item) { %> <% tongTien +=
-                item.Sach.GiaBan * item.SoLuong %>
-                <tr>
-                  <td>
-                    <img
-                      src="/uploads/<%= item.Sach.HinhAnh || 'default.jpg' %>"
-                      class="book-image rounded"
-                      alt="<%= item.Sach.TieuDe %>"
-                    />
-                  </td>
-                  <td>
-                    <h5 class="mb-0"><%= item.Sach.TieuDe %></h5>
-                    <small class="text-muted"
-                      >Tác giả: <%= item.Sach.TacGia %></small
-                    >
-                  </td>
-                  <td><%= item.Sach.GiaBan.toLocaleString('vi-VN') %> đ</td>
-                  <td>
-                    <div class="quantity-control input-group">
-                      <button
-                        class="btn btn-outline-secondary"
-                        onclick="updateQuantity('<%= item.Sach._id %>', -1)"
-                      >
-                        <i class="bi bi-dash"></i>
-                      </button>
-                      <input
-                        type="number"
-                        class="form-control text-center"
-                        value="<%= item.SoLuong %>"
-                        min="1"
-                        onchange="updateQuantity('<%= item.Sach._id %>', this.value)"
-                      />
-                      <button
-                        class="btn btn-outline-secondary"
-                        onclick="updateQuantity('<%= item.Sach._id %>', 1)"
-                      >
-                        <i class="bi bi-plus"></i>
-                      </button>
-                    </div>
-                  </td>
-                  <td>
-                    <%= (item.Sach.GiaBan *
-                    item.SoLuong).toLocaleString('vi-VN') %> đ
-                  </td>
-                  <td>
-                    <button
-                      class="btn btn-danger btn-sm"
-                      onclick="removeFromCart('<%= item.Sach._id %>')"
-                    >
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  </td>
-                </tr>
-                <% }); %>
-              </tbody>
-              <tfoot>
-                <tr class="table-active">
-                  <td colspan="4" class="text-end">
-                    <strong>Tổng tiền:</strong>
-                  </td>
-                  <td>
-                    <strong><%= tongTien.toLocaleString('vi-VN') %> đ</strong>
-                  </td>
-                  <td></td>
-                </tr>
-              </tfoot>
-            </table>
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <span class="cart-title"
+                ><i class="bi bi-cart3"></i> Giỏ hàng của <%= session.HoVaTen
+                %></span
+              >
+              <span class="badge bg-primary ms-2"
+                ><%= gioHang.length %> sản phẩm</span
+              >
+            </div>
+            <a href="/" class="btn btn-outline-secondary">
+              <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
+            </a>
           </div>
-        </div>
-        <div class="card-footer text-end">
-          <a href="/" class="btn btn-secondary">
-            <i class="bi bi-arrow-left"></i> Tiếp tục mua sắm
-          </a>
-          <button class="btn btn-primary" onclick="checkout()">
-            Thanh toán <i class="bi bi-arrow-right"></i>
-          </button>
+
+          <% if (gioHang && gioHang.length > 0) { %>
+          <div class="card shadow-sm">
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table cart-table align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Sách</th>
+                      <th>Tên sách</th>
+                      <th>Giá</th>
+                      <th style="width: 220px">Số lượng</th>
+                      <th>Thành tiền</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% let tongTien = 0 %> <% gioHang.forEach(function(item) {
+                    %> <% tongTien += item.sachId.GiaBan * item.soLuong %>
+                    <tr>
+                      <td>
+                        <img
+                          src="/uploads/<%= item.sachId.HinhAnh || 'default.jpg' %>"
+                          class="book-image"
+                          alt="<%= item.sachId.TieuDe %>"
+                        />
+                      </td>
+                      <td class="text-start">
+                        <div class="fw-semibold"><%= item.sachId.TieuDe %></div>
+                        <div class="text-muted small">
+                          Tác giả: <%= item.sachId.TacGia %>
+                        </div>
+                      </td>
+                      <td>
+                        <span class="text-primary fw-bold"
+                          ><%= item.sachId.GiaBan.toLocaleString('vi-VN') %>
+                          đ</span
+                        >
+                      </td>
+                      <td>
+                        <div class="input-group mx-auto" style="width: 200px">
+                          <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            onclick="updateQuantity('<%= item.sachId._id %>', -1, '<%= item.sachId.SoLuong %>')"
+                          >
+                            <i class="bi bi-dash"></i>
+                          </button>
+                          <input
+                            type="hidden"
+                            min="1"
+                            max="<%= item.sachId.SoLuong %>"
+                            id="cart-qty-<%= item.sachId._id %>"
+                            class="form-control text-center"
+                            value="<%= item.soLuong %>"
+                            readonly
+                            style="background: #fff; font-weight: bold"
+                          />
+                          <span
+                            class="input-group-text px-2"
+                            style="font-size: 0.95em"
+                          >
+                            <i class="bi bi-box-seam"></i>
+                            <span class="ms-2"><%= item.soLuong %></span>
+                          </span>
+                          <button
+                            class="btn btn-outline-secondary"
+                            type="button"
+                            onclick="updateQuantity('<%= item.sachId._id %>', 1, '<%= item.sachId.SoLuong %>')"
+                          >
+                            <i class="bi bi-plus"></i>
+                          </button>
+                        </div>
+                        <div class="small text-muted mt-1">
+                          Trong giỏ:
+                          <span class="fw-bold"><%= item.soLuong %></span> | Còn
+                          lại:
+                          <span class="fw-bold"
+                            ><%= item.sachId.SoLuong - item.soLuong %></span
+                          >
+                        </div>
+                      </td>
+                      <td>
+                        <span class="fw-bold text-success">
+                          <%= (item.sachId.GiaBan *
+                          item.soLuong).toLocaleString('vi-VN') %> đ
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          class="btn btn-danger btn-sm"
+                          onclick="removeFromCart('<%= item.sachId._id %>')"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                  <tfoot>
+                    <tr class="table-active">
+                      <td colspan="4" class="text-end">
+                        <strong>Tổng tiền:</strong>
+                      </td>
+                      <td>
+                        <strong class="text-danger"
+                          ><%= tongTien.toLocaleString('vi-VN') %> đ</strong
+                        >
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer text-end bg-light">
+              <button class="btn btn-primary px-4" onclick="checkout()">
+                Thanh toán <i class="bi bi-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+          <% } else { %>
+          <div class="text-center py-5">
+            <i class="bi bi-cart-x display-1 text-muted"></i>
+            <h3 class="mt-3">Giỏ hàng trống</h3>
+            <p class="text-muted">Bạn chưa có sản phẩm nào trong giỏ hàng</p>
+            <a href="/" class="btn btn-primary">
+              <i class="bi bi-shop"></i> Tiếp tục mua sắm
+            </a>
+          </div>
+          <% } %>
         </div>
       </div>
-      <% } else { %>
-      <div class="text-center py-5">
-        <i class="bi bi-cart-x display-1 text-muted"></i>
-        <h3 class="mt-3">Giỏ hàng trống</h3>
-        <p class="text-muted">Bạn chưa có sản phẩm nào trong giỏ hàng</p>
-        <a href="/" class="btn btn-primary">
-          <i class="bi bi-shop"></i> Tiếp tục mua sắm
-        </a>
-      </div>
-      <% } %>
     </div>
 
     <script>
-      function updateQuantity(sachId, change) {
-        fetch(`/giohang/capnhat/${sachId}`, {
+      async function updateQuantity(sachId, delta, soLuongConLai) {
+        const input = document.getElementById(`cart-qty-${sachId}`);
+        let current = parseInt(input.value);
+        soLuongConLai = parseInt(soLuongConLai);
+        let newQty = current + delta;
+        if (newQty < 1) newQty = 1;
+        if (newQty > soLuongConLai) {
+          alert("Không thể vượt quá số lượng còn lại!");
+          newQty = soLuongConLai;
+        }
+        if (newQty === current) return;
+
+        const response = await fetch(`/giohang/capnhat/${sachId}`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ change: change }),
-        }).then(() => location.reload());
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ soLuong: newQty }),
+        });
+        const data = await response.json();
+        if (data.success) {
+          input.value = newQty;
+          location.reload();
+        } else {
+          alert(data.message || "Có lỗi xảy ra khi cập nhật số lượng");
+        }
       }
 
-      function removeFromCart(sachId) {
-        if (confirm("Bạn có chắc muốn xóa sách này khỏi giỏ hàng?")) {
-          fetch(`/giohang/xoa/${sachId}`, {
+      async function removeFromCart(sachId) {
+        if (!confirm("Bạn có chắc muốn xóa sách này khỏi giỏ hàng?")) {
+          return;
+        }
+
+        try {
+          const response = await fetch(`/giohang/xoa/${sachId}`, {
             method: "POST",
-          }).then(() => location.reload());
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            location.reload();
+          } else {
+            alert(data.message || "Có lỗi xảy ra khi xóa sách");
+          }
+        } catch (error) {
+          console.error("Lỗi:", error);
+          alert("Có lỗi xảy ra khi xóa sách");
         }
       }
 

@@ -8,9 +8,14 @@ const GioHangSchema = new mongoose.Schema({
   },
   sach: [
     {
-      sachId: { type: mongoose.Schema.Types.ObjectId, ref: "Sach" },
-      soLuong: { type: Number, default: 1 },
-      ngayThem: { type: Date, default: Date.now },
+      sachId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Sach",
+      },
+      soLuong: {
+        type: Number,
+        default: 1,
+      },
     },
   ],
 });

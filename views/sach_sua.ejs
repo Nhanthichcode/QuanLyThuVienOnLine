@@ -1,182 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-      rel="stylesheet"
-    />
-    <title><%= title %> - Thêm sách</title>
-  </head>
-
-  <body>
-    <div class="container">
-      <!-- Menu ngang -->
-      <%- include('navbar') %>
-
-      <!-- Nội dung chính -->
-      <div class="card mt-3">
-        <div class="card-header"><%= title %></div>
-        <div class="card-body">
-          <form action="/sach/them" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= title %> - Sửa sách</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container">
+    <%- include('navbar') %>
+    <div class="card mt-4 shadow">
+      <div class="card-header bg-primary text-white">
+        <i class="bi bi-pencil-square"></i> <%= title %>
+      </div>
+      <div class="card-body">
+        <% if(sach) { %>
+        <form action="/sach/sua/<%= sach._id %>" method="POST" enctype="multipart/form-data">
+          <div class="row">
+            <div class="col-md-6 mb-3">
               <label for="TieuDe" class="form-label">Tiêu đề sách:</label>
-              <input
-                type="text"
-                id="TieuDe"
-                name="TieuDe"
-                class="form-control"
-                required
-              />
+              <input type="text" id="TieuDe" name="TieuDe" class="form-control" value="<%= sach.TieuDe %>" required />
             </div>
-
-            <div class="mb-3">
-              <label for="TomTat" class="form-label">Tóm tắt:</label>
-              <textarea
-                id="TomTat"
-                name="TomTat"
-                class="form-control"
-                required
-              ></textarea>
+            <div class="col-md-6 mb-3">
+              <label for="TacGia" class="form-label">Tác giả:</label>
+              <input type="text" id="TacGia" name="TacGia" class="form-control" value="<%= sach.TacGia %>" required />
             </div>
-
-            <div class="mb-3">
-              <label for="NoiDung" class="form-label">Nội dung:</label>
-              <textarea
-                id="NoiDung"
-                name="NoiDung"
-                class="form-control"
-                required
-              ></textarea>
-            </div>
-
-            <div class="mb-3">
-              <label for="HinhAnh" class="form-label">Hình ảnh:</label>
-              <input
-                type="file"
-                id="HinhAnh"
-                name="HinhAnh"
-                class="form-control"
-                required
-              />
-            </div>
-
-            <div class="mb-3">
+          </div>
+          <div class="mb-3">
+            <label for="TomTat" class="form-label">Tóm tắt:</label>
+            <textarea id="TomTat" name="TomTat" class="form-control" required><%= sach.TomTat %></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="NoiDung" class="form-label">Nội dung:</label>
+            <textarea id="NoiDung" name="NoiDung" class="form-control" required><%= sach.NoiDung %></textarea>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
               <label for="ChuDe" class="form-label">Chủ đề:</label>
               <select id="ChuDe" name="ChuDe" class="form-select" required>
-                <% chude.forEach((chude) => { %>
-                <option value="<%= chude._id %>"><%= chude.TenChuDe %></option>
+                <% chude.forEach((cd) => { %>
+                  <option value="<%= cd._id %>" <%= sach.ChuDe && sach.ChuDe.toString() === cd._id.toString() ? "selected" : "" %>><%= cd.TenChuDe %></option>
                 <% }); %>
               </select>
             </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="NamXuatBan" class="form-label">Năm xuất bản:</label>
-              <input
-                type="date"
-                id="NamXuatBan"
-                name="NamXuatBan"
-                class="form-control"
-              />
+              <input type="date" id="NamXuatBan" name="NamXuatBan" class="form-control" value="<%= sach.NamXuatBan ? sach.NamXuatBan.toISOString().substring(0,10) : '' %>" />
             </div>
-
-            <div class="mb-3">
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
               <label for="NhaXuatBan" class="form-label">Nhà xuất bản:</label>
-              <input
-                type="text"
-                id="NhaXuatBan"
-                name="NhaXuatBan"
-                class="form-control"
-                required
-              />
+              <input type="text" id="NhaXuatBan" name="NhaXuatBan" class="form-control" value="<%= sach.NhaXuatBan %>" required />
             </div>
-
-            <div class="mb-3">
-              <label for="TacGia" class="form-label">Tác giả:</label>
-              <input
-                type="text"
-                id="TacGia"
-                name="TacGia"
-                class="form-control"
-                required
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="DanhGia" class="form-label">Đánh giá:</label>
-              <input
-                type="number"
-                id="DanhGia"
-                name="DanhGia"
-                class="form-control"
-                min="0"
-                max="5"
-                step="0.1"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="SoLuong" class="form-label">Số lượng:</label>
-              <input
-                type="number"
-                id="SoLuong"
-                name="SoLuong"
-                class="form-control"
-                min="1"
-                required
-              />
-            </div>
-
-            <div class="mb-3">
+            <div class="col-md-6 mb-3">
               <label for="NgonNgu" class="form-label">Ngôn ngữ:</label>
-              <input
-                type="text"
-                id="NgonNgu"
-                name="NgonNgu"
-                class="form-control"
-                value="Tiếng Việt"
-              />
+              <input type="text" id="NgonNgu" name="NgonNgu" class="form-control" value="<%= sach.NgonNgu %>" />
             </div>
-
-            <div class="mb-3">
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="SoLuong" class="form-label">Số lượng:</label>
+              <input type="number" id="SoLuong" name="SoLuong" class="form-control" min="1" value="<%= sach.SoLuong %>" required />
+            </div>
+            <div class="col-md-4 mb-3">
               <label for="GiaBan" class="form-label">Giá bán:</label>
-              <input
-                type="number"
-                id="GiaBan"
-                name="GiaBan"
-                class="form-control"
-                min="10000"
-                required
-              />
+              <input type="number" id="GiaBan" name="GiaBan" class="form-control" min="10000" value="<%= sach.GiaBan %>" required />
             </div>
-
-            <div class="mb-3">
-              <label for="tags" class="form-label">Tags:</label>
-              <input
-                type="text"
-                id="tags"
-                name="tags"
-                class="form-control"
-                placeholder="Nhập các tag, cách nhau bằng dấu phẩy"
-              />
+            <div class="col-md-4 mb-3">
+              <label for="DanhGia" class="form-label">Đánh giá:</label>
+              <input type="number" id="DanhGia" name="DanhGia" class="form-control" min="0" max="5" step="0.1" value="<%= sach.DanhGia %>" />
             </div>
-
-            <button type="submit" class="btn btn-primary">
-              <i class="bi bi-plus-lg"></i> Thêm sách
-            </button>
-          </form>
-        </div>
+          </div>
+          <div class="mb-3">
+            <label for="tags" class="form-label">Tags:</label>
+            <input type="text" id="tags" name="tags" class="form-control" value="<%= sach.tags ? sach.tags.join(', ') : '' %>" placeholder="Nhập các tag, cách nhau bằng dấu phẩy" />
+          </div>
+          <div class="mb-3">
+            <label for="HinhAnh" class="form-label">Hình ảnh:</label>
+            <input type="file" id="HinhAnh" name="HinhAnh" class="form-control" />
+            <% if (sach.HinhAnh) { %>
+              <div class="mt-2">
+                <img src="/uploads/<%= sach.HinhAnh %>" alt="Ảnh sách" style="max-width:120px;max-height:160px;border:1px solid #ddd;" />
+                <span class="text-muted ms-2">(Ảnh hiện tại)</span>
+              </div>
+            <% } %>
+          </div>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-save"></i> Lưu thay đổi
+          </button>
+          <a href="/sach" class="btn btn-secondary ms-2">
+            <i class="bi bi-arrow-left"></i> Quay lại
+          </a>
+        </form>
+        <% } else { %>
+          <div class="alert alert-danger">Không tìm thấy sách này!</div>
+        <% } %>
       </div>
-
-      <!-- Footer -->
-      <%- include('footer') %>
     </div>
-
-    <%- include('javascript') %>
-  </body>
+    <%- include('footer') %>
+  </div>
+  <%- include('javascript') %>
+</body>
 </html>

@@ -30,6 +30,13 @@ router.get("/", async (req, res) => {
   }
 });
 
+// GET: Thuê sách
+router.get("/thuesach", async (req, res) => {
+  var sach = await Sach.find();
+  res.render("thuesach", {
+    sach: sach,
+  });
+});
 // GET: Xem chi tiết sách
 router.get("/sach/chitiet/:id", async (req, res) => {
   try {

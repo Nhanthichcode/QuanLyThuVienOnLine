@@ -70,6 +70,8 @@
 
   <body>
     <a href="/giohang">Test giỏ hàng</a>
+    <hr />
+    <a href="/thuesach">Test thuê sách</a>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
       <div class="container">
@@ -199,13 +201,17 @@
                     >
                       <i class="bi bi-info-circle"></i> Chi tiết
                     </a>
+                    <!-- Nút thêm sách -->
+                    <% if(session.QuyenHan !=='admin') { %>
                     <button
                       class="btn btn-success btn-sm add-to-cart"
                       data-book-id="<%= book._id %>"
+                      onclick="addToCart('<%= book._id %>')"
                       title="Thêm vào giỏ hàng"
                     >
                       <i class="bi bi-cart-plus"></i>
                     </button>
+                    <% }%>
                   </div>
                 </div>
               </div>
@@ -280,5 +286,60 @@
     </footer>
 
     <script src="http://127.0.0.1:3001/js/app.js"></script>
+    <script>
+      async function addToCart(sachId) {
+        try {
+          var taikhoanID = "<%= session.MaNguoiDung %>";
+          if (taikhoanID == null || taikhoanID == "") {
+            alert("Vui lòng đăng nhập để thêm sách vào giỏ hàng.");
+            window.location.href = "/dangnhap";
+            return;
+          }
+
+          // Lấy số lượng còn lại từ thuộc tính data của nút hoặc thẻ chứa sách
+          var soLuongConLai = document
+            .querySelector(`[data-book-id='${sachId}']`)
+            ?.getAttribute("data-soluong");
+          soLuongConLai = parseInt(soLuongConLai);
+
+          // Lấy số lượng đã có trong giỏ hàng (nếu có)
+          var inputInCart = document.querySelector(`#cart-qty-${sachId}`);
+          var soLuongTrongGio = inputInCart ? parseInt(inputInCart.value) : 0;
+
+          if (soLuongTrongGio + 1 > soLuongConLai) {
+            alert("Không thể thêm quá số lượng sách còn lại!");
+            return;
+          }
+
+          const response = await fetch("/giohang/them/" + sachId, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              sachId: sachId,
+              soLuong: 1,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (data.success) {
+            alert("Thêm sách vào giỏ hàng thành công!");
+            // Cập nhật số lượng trong badge giỏ hàng
+            const cartBadge = document.querySelector(".badge");
+            if (cartBadge && data.gioHangCount !== undefined) {
+              cartBadge.textContent = data.gioHangCount;
+            }
+            setTimeout(() => location.reload(), 500);
+          } else {
+            alert(data.message || "Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
+          }
+        } catch (error) {
+          console.log("Lỗi:" + error);
+          alert("Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
+        }
+      }
+    </script>
   </body>
 </html>

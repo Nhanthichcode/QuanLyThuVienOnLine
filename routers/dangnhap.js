@@ -98,13 +98,24 @@ router.post("/dangnhap", async (req, res) => {
         if (taikhoan.TrangThai == false) {
           req.session.error = "Người dùng đã bị khóa tài khoản.";
           return res.redirect("/error");
-        } else {
-          // Đăng ký session
-          req.session.MaNguoiDung = taikhoan._id.toString(); // Lưu ID dưới dạng chuỗi
-          req.session.HoVaTen = taikhoan.HoVaTen;
-          req.session.QuyenHan = taikhoan.QuyenHan;
         }
-        return res.redirect("/");
+
+        // Đăng ký session
+        req.session.MaNguoiDung = taikhoan._id.toString();
+        req.session.HoVaTen = taikhoan.HoVaTen;
+        req.session.QuyenHan = taikhoan.QuyenHan;
+        req.session.isAuthenticated = true; // Thêm flag xác thực
+
+        // Initialize empty cart in session
+        req.session.gioHang = taikhoan.gioHang || [];
+        // Save session before redirect
+        req.session.save((err) => {
+          if (err) {
+            console.error("Lỗi lưu session:", err);
+            return res.redirect("/error");
+          }
+          return res.redirect("/");
+        });
       } else {
         req.session.error = "Mật khẩu không đúng.";
         return res.redirect("/error");
