@@ -1,8 +1,76 @@
-<nav class="navbar navbar-expand-lg bg-info">
+<style>
+  .navbar-custom {
+    background: linear-gradient(90deg, #0f2027 0%, #2c5364 60%, #6a82fb 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  .navbar-brand {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #fff !important;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px #0002;
+  }
+  .navbar-nav .nav-link {
+    color: #fff !important;
+    font-weight: 500;
+    margin-right: 0.5rem;
+    transition: background 0.2s, color 0.2s;
+    border-radius: 4px;
+    padding: 0.45rem 0.9rem;
+  }
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link.active {
+    background: rgba(255, 255, 255, 0.13);
+    color: #ffe066 !important;
+  }
+  .navbar-nav .nav-link.btn-cart {
+    background: #fff;
+    color: #0d6efd !important;
+    font-weight: bold;
+    margin-left: 0.5rem;
+    border: 1px solid #0d6efd;
+  }
+  .navbar-nav .nav-link.btn-cart:hover {
+    background: #0d6efd;
+    color: #fff !important;
+  }
+  .navbar-nav .nav-link.btn-rent {
+    background: #20c997;
+    color: #fff !important;
+    margin-left: 0.5rem;
+    border: 1px solid #20c997;
+  }
+  .navbar-nav .nav-link.btn-rent:hover {
+    background: #fff;
+    color: #20c997 !important;
+  }
+  .navbar .badge {
+    font-size: 0.85em;
+    padding: 0.3em 0.6em;
+  }
+  .navbar .form-control {
+    border-radius: 20px;
+    min-width: 180px;
+  }
+  @media (max-width: 576px) {
+    .navbar-brand {
+      font-size: 1.05rem;
+    }
+    .navbar-nav .nav-link {
+      padding: 0.4rem 0.7rem;
+      font-size: 0.98em;
+    }
+    .navbar .form-control {
+      min-width: 100px;
+      font-size: 0.95em;
+    }
+  }
+</style>
+<nav class="container navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"
-      ><i class="bi bi-star"></i> Thư Viện Online</a
-    >
+    <a class="navbar-brand" href="/">
+      <i class="bi bi-star-fill me-1"></i> Thư Viện Online
+    </a>
     <button
       class="navbar-toggler"
       type="button"
@@ -14,26 +82,19 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/tinmoi"
-            ><i class="bi bi-compass"></i> Sách mới nhất</a
-          >
-        </li>
         <% if(typeof session === "undefined" || !session.MaNguoiDung) { %>
         <!-- Hiển thị khi chưa đăng nhập -->
         <li class="nav-item">
-          <a class="nav-link" href="/dangky"
-            ><i class="bi bi-person-plus-fill"></i> Đăng ký</a
-          >
+          <a class="nav-link" href="/dangky">
+            <i class="bi bi-person-plus-fill"></i> Đăng ký
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/dangnhap"
-            ><i class="bi bi-box-arrow-in-right"></i> Đăng nhập</a
-          >
+          <a class="nav-link" href="/dangnhap">
+            <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
+          </a>
         </li>
-        <% } else { %>
-        <!-- Hiển thị khi đã đăng nhập -->
-        <% if(session.QuyenHan == "admin") { %>
+        <% } else { %> <% if(session.QuyenHan == "admin") { %>
         <!-- Menu quản lý dành cho admin -->
         <li class="nav-item dropdown">
           <a
@@ -47,24 +108,23 @@
           </a>
           <ul class="dropdown-menu">
             <li>
-              <a class="dropdown-item" href="/khuvuc"
-                ><i class="bi bi-map"></i> Khu Vực</a
-              >
+              <a class="dropdown-item" href="/khuvuc">
+                <i class="bi bi-map"></i> Khu Vực
+              </a>
             </li>
             <li>
-              <a class="dropdown-item" href="/chude"
-                ><i class="bi bi-card-checklist"></i> Chủ đề</a
-              >
+              <a class="dropdown-item" href="/chude">
+                <i class="bi bi-card-checklist"></i> Chủ đề
+              </a>
             </li>
             <li>
-              <a class="dropdown-item" href="/sach"
-                ><i class="bi bi-book"></i> Xem Sách</a
-              >
+              <a class="dropdown-item" href="/sach">
+                <i class="bi bi-book"></i> Xem Sách
+              </a>
             </li>
           </ul>
         </li>
         <% } %>
-
         <!-- Menu cá nhân -->
         <li class="nav-item dropdown">
           <a
@@ -79,34 +139,31 @@
           <ul class="dropdown-menu">
             <% if(session.QuyenHan == "admin") { %>
             <li>
-              <a class="dropdown-item" href="/taikhoan"
-                ><i class="bi bi-house"></i> Trang quản lý</a
-              >
-              <hr />
+              <a class="dropdown-item" href="/taikhoan">
+                <i class="bi bi-house"></i> Trang quản lý
+              </a>
+              <hr class="dropdown-divider" />
             </li>
-            <% } else { %> <% } %>
+            <% } %>
             <li>
-              <a class="dropdown-item" href="/taikhoan/hoso"
-                ><i class="bi bi-person-badge"></i> Hồ sơ cá nhân</a
+              <a
+                class="dropdown-item"
+                href="/taikhoan/cuatoi/<%= session.MaNguoiDung %>"
               >
-            </li>
-            <li>
-              <a class="dropdown-item" href="/taikhoan/doimatkhau"
-                ><i class="bi bi-key"></i> Đổi mật khẩu</a
-              >
+                <i class="bi bi-person-badge"></i> Hồ sơ cá nhân
+              </a>
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li>
-              <a class="dropdown-item" href="/dangxuat"
-                ><i class="bi bi-box-arrow-right"></i> Đăng xuất</a
-              >
+              <a class="dropdown-item" href="/dangxuat">
+                <i class="bi bi-box-arrow-right"></i> Đăng xuất
+              </a>
             </li>
           </ul>
         </li>
         <% if(session.MaNguoiDung && session.QuyenHan != "admin") { %>
         <li class="nav-item">
-          <a class="nav-link position-relative" href="/giohang">
-            <!-- Biểu tượng giỏ hàng -->
+          <a class="nav-link btn-cart position-relative" href="/giohang">
             <i class="bi bi-cart3 fs-5"></i>
             <% if(session.gioHang && session.gioHang.length > 0) { %>
             <span
@@ -114,8 +171,13 @@
             >
               <%= session.gioHang.length %>
             </span>
-            <% } %> Giỏ hàng của tôi</a
-          >
+            <% } %> Giỏ hàng
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link btn-rent" href="/thuesach">
+            <i class="bi bi-bag-check"></i> Thuê sách
+          </a>
         </li>
         <% } %> <% } %>
       </ul>
@@ -127,7 +189,7 @@
           name="tukhoa"
           placeholder="Bạn muốn tìm gì?"
         />
-        <button class="btn btn-outline-success" type="submit">
+        <button class="btn btn-outline-light" type="submit">
           <i class="bi bi-search"></i>
         </button>
       </form>

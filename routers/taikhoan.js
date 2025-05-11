@@ -51,6 +51,16 @@ router.get("/sua/:id", async (req, res) => {
   });
 });
 
+// GET: tài khoản của tôi
+router.get("/cuatoi/:id", async (req, res) => {
+  var id = req.params.id;
+  var tk = await TaiKhoan.findById(id);
+  res.render("taikhoan_cuatoi", {
+    title: "Hồ sơ cá nhân",
+    taikhoan: tk,
+  });
+});
+
 // POST: Sửa tài khoản
 router.post("/sua/:id", async (req, res) => {
   var id = req.params.id;
@@ -66,7 +76,11 @@ router.post("/sua/:id", async (req, res) => {
     data["MatKhau"] = bcrypt.hashSync(req.body.MatKhau, salt);
   }
   await TaiKhoan.findByIdAndUpdate(id, data);
-  res.redirect("/taikhoan");
+  res.render("success", {
+    title: "Thành công",
+    message: "Sửa tài khoản hoàn tất",
+    redirectUrl: "/index",
+  });
 });
 
 // GET: Xóa tài khoản

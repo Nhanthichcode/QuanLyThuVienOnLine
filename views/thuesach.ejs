@@ -31,9 +31,10 @@
               data-book-id="<%= book._id %>"
             >
               <img
-                src="/uploads/<%= book.HinhAnh || 'default.jpg' %>"
+                src="/uploads/<%= book.HinhAnh %>"
                 alt="<%= book.TieuDe %>"
                 class="book-cover me-3"
+                onerror="this.onerror=null;this.src='/uploads/null.png';"
                 style="
                   width: 80px;
                   height: 120px;

@@ -50,8 +50,10 @@
                 <td class="align-middle text-center">
                   <img
                     src="/uploads/<%= s.HinhAnh %>"
-                    alt="Hình sách"
-                    width="50"
+                    width="40"
+                    class="img-fluid rounded"
+                    alt="<%= s.TenSach %>"
+                    onerror="this.onerror=null;this.src='/uploads/null.png';"
                   />
                 </td>
                 <td class="align-middle"><%= s.TieuDe %></td>

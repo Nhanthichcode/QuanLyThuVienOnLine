@@ -77,7 +77,7 @@
                       <th>Sách</th>
                       <th>Tên sách</th>
                       <th>Giá</th>
-                      <th style="width: 220px">Số lượng</th>
+                      <th>Số lượng</th>
                       <th>Thành tiền</th>
                       <th></th>
                     </tr>
@@ -88,9 +88,10 @@
                     <tr>
                       <td>
                         <img
-                          src="/uploads/<%= item.sachId.HinhAnh || 'default.jpg' %>"
+                          src="/uploads/<%= item.sachId.HinhAnh %>"
                           class="book-image"
                           alt="<%= item.sachId.TieuDe %>"
+                           onerror="this.onerror=null;this.src='/uploads/null.png';"
                         />
                       </td>
                       <td class="text-start">
@@ -106,7 +107,14 @@
                         >
                       </td>
                       <td>
-                        <div class="input-group mx-auto" style="width: 200px">
+                        <div
+                          class="input-group mx-auto"
+                          style="
+                            width: 200px;
+                            align-items: center;
+                            justify-content: center;
+                          "
+                        >
                           <button
                             class="btn btn-outline-secondary"
                             type="button"
@@ -140,9 +148,8 @@
                           </button>
                         </div>
                         <div class="small text-muted mt-1">
-                          Trong giỏ:
-                          <span class="fw-bold"><%= item.soLuong %></span> | Còn
-                          lại:
+                          </span>
+                          <span>Còn lại:</span>
                           <span class="fw-bold"
                             ><%= item.sachId.SoLuong - item.soLuong %></span
                           >
@@ -252,9 +259,9 @@
           alert("Có lỗi xảy ra khi xóa sách");
         }
       }
-
-      function checkout() {
-        window.location.href = "/thanhtoan";
+      function checkout() {        
+          alert("Dữ liệu thanh toán sẽ được gửi đi (chức năng này chưa hoàn thiện).");
+          console.log("Dữ liệu thuê:", rentalData);        
       }
     </script>
 

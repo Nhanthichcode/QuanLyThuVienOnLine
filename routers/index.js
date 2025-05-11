@@ -69,17 +69,17 @@ router.get("/sach/chude/:id", async (req, res) => {
     var id = req.params.id;
     var cm = await ChuDe.find();
     var cd = await ChuDe.findById(id);
+    var xnn = await Sach.find()
+      .sort({ LuotXem: -1 })
+      .limit(3)
+      .populate("ChuDe")
+      .exec();
     var sach = await Sach.find({ ChuDe: id })
       .populate("ChuDe")
       .sort({ NamXuatBan: -1 })
       .limit(8)
       .exec();
-    var xnn = await Sach.find({ ChuDe: id })
 
-      .sort({ LuotXem: -1 })
-      .limit(3)
-      .populate("ChuDe")
-      .exec();
     res.render("sach_chude", {
       title: "Sách theo Chủ đề",
       sach: sach,

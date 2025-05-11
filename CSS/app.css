@@ -5,6 +5,29 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+@media (max-width: 576px) {
+  .navbar .nav-link,
+  .navbar-brand {
+    font-size: 1em !important;
+    padding: 0.5rem 0.7rem !important;
+  }
+  .navbar .badge {
+    font-size: 0.8em !important;
+    padding: 0.3em 0.5em !important;
+  }
+  .navbar .fs-5,
+  .navbar .fs-6 {
+    font-size: 1.1rem !important;
+  }
+  .navbar .form-control {
+    font-size: 0.95em;
+    padding: 0.3rem 0.5rem;
+  }
+  .navbar .btn {
+    font-size: 0.95em;
+    padding: 0.3rem 0.7rem;
+  }
+}
 :root {
   --bs-blue: #2780e3;
   --bs-indigo: #6610f2;
