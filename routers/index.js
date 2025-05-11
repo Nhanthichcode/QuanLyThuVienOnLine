@@ -69,6 +69,8 @@ router.get("/sach/chude/:id", async (req, res) => {
     var id = req.params.id;
     var cm = await ChuDe.find();
     var cd = await ChuDe.findById(id);
+    // Lấy tên chủ đề:
+    var tenChuDe = cd.TenChuDe;
     var xnn = await Sach.find()
       .sort({ LuotXem: -1 })
       .limit(3)
@@ -81,7 +83,7 @@ router.get("/sach/chude/:id", async (req, res) => {
       .exec();
 
     res.render("sach_chude", {
-      title: "Sách theo Chủ đề",
+      title: "Sách theo Chủ đề: " + tenChuDe,
       sach: sach,
       chude: cd,
       chuyenmuc: cm,
@@ -100,7 +102,7 @@ router.post("/timkiem", async (req, res) => {
     var chuyenmuc = await ChuDe.find(); // Lấy danh sách chủ đề
     var xnn = await Sach.find()
       .sort({ LuotXem: -1 })
-      .limit(10)
+      .limit(4)
       .populate("ChuDe")
       .exec(); // Lấy danh sách sách xem nhiều nhất
     // Tìm kiếm sách theo tiêu đề (không phân biệt chữ hoa/chữ thường)
