@@ -9860,7 +9860,7 @@ label {
 .navbar-brand {
   font-family: "PT Serif", serif;
   font-weight: 700;
-  text-transform: lowercase;
+  text-transform: capitalize;
 }
 .navbar,
 .navbar * {
