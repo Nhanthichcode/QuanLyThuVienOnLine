@@ -143,7 +143,9 @@
     <%- include('navbar') %>
     <div class="container text-center my-4">
       <h1 class="display-4">Khám phá hàng nghìn cuốn sách tuyệt vời</h1>
-      <p class="lead text-muted">Thư viện online dành cho mọi độc giả.</p>
+      <p class="text-secondary form-label">
+        Thư viện online dành cho mọi độc giả.
+      </p>
     </div>
 
     <main class="container py-4">
@@ -276,7 +278,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="site-footer bg-dark text-white py-4">
+    <!-- <footer class="site-footer bg-dark text-white py-4">
       <div class="container text-center">
         <ul class="nav justify-content-center mb-2">
           <li class="nav-item">
@@ -292,9 +294,8 @@
         </ul>
         <p>&copy; 2025 Thư Viện Online của Lê Trí Nhàn & Đàm Thanh Phong</p>
       </div>
-    </footer>
-
-    <%- include('javascript') %>
+    </footer> -->
+    <%- include ('footer') %> <%- include('javascript') %>
 
     <script>
       async function addToCart(sachId) {

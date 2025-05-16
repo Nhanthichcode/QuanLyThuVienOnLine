@@ -1,0 +1,107 @@
+.dark-theme-mode {
+  background-color: #1a1a1a !important;
+  color: #e4e4e4 !important;
+  transition: all 0.3s ease;
+}
+
+/* Header improvements */
+.dark-theme-mode .navbar-custom {
+  background: linear-gradient(90deg, #2a598e 0%, #2c3e50 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Card and modal improvements */
+.dark-theme-mode .card,
+.dark-theme-mode .modal-content {
+  background-color: #2d2d2d !important;
+  border-color: #404040;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Table improvements */
+.dark-theme-mode .table {
+  color: #e4e4e4 !important;
+  background-color: #2d2d2d;
+  border-color: #f0e9e9;
+}
+.dark-theme-mode th,
+.dark-theme-mode td {
+  color: #e4e4e4 !important;
+  background-color: #2d2d2d;
+  border-color: #f1eaea;
+}
+.dark-theme-mode .table thead th {
+  background-color: #363636;
+  border-bottom: 2px solid #505050;
+  color: #fff;
+}
+
+.dark-theme-mode .table tbody tr {
+  border-bottom: 1px solid #e4b2b2;
+}
+
+.dark-theme-mode .table tbody tr:hover {
+  background-color: #363636;
+}
+
+.dark-theme-mode .table-striped tbody tr:nth-of-type(odd) {
+  background-color: #333333;
+}
+
+/* Form controls */
+.dark-theme-mode .form-control {
+  background-color: #ffffff;
+  border-color: #404040;
+  color: #000000;
+}
+
+.dark-theme-mode .form-control:focus {
+  background-color: #e78e77;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
+}
+
+/* Dropdown improvements */
+.dark-theme-mode .dropdown-menu {
+  background-color: #2d2d2d !important;
+  border-color: #404040;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme-mode .dropdown-item {
+  color: #e4e4e4;
+}
+
+.dark-theme-mode .dropdown-item:hover {
+  background-color: #363636;
+  color: #fff;
+}
+
+/* Headers and text */
+.dark-theme-mode h1,
+.dark-theme-mode h2,
+.dark-theme-mode h3,
+.dark-theme-mode h4,
+.dark-theme-mode h5,
+.dark-theme-mode h6,
+.card-header,
+.form-label,
+.lead {
+  color: #fff;
+}
+
+input[type="text"] {
+  color: #000000; /* Màu chữ khi gõ */
+}
+/* Links */
+.dark-theme-mode a:not(.btn) {
+  color: #4a90e2;
+}
+input[type="text"]::placeholder {
+  color: #adb5bd; /* Màu chữ placeholder */
+  opacity: 1; /* Đảm bảo hiển thị rõ */
+}
+
+.dark-theme-mode a:not(.btn):hover {
+  color: #357abd;
+}

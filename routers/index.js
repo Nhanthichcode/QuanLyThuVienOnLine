@@ -111,7 +111,7 @@ router.post("/timkiem", async (req, res) => {
     }).populate("ChuDe"); // Lấy thông tin chủ đề liên quan
 
     res.render("sach_timkiem", {
-      title: "Kết quả tìm kiếm",
+      title: "Kết quả tìm kiếm: " + tukhoa,
       sach: sachs,
       tukhoa: tukhoa,
       chuyenmuc: chuyenmuc, // Truyền danh sách chủ đề vào view

@@ -23,9 +23,12 @@
       <div class="card mt-3">
         <div class="card-header"><%= title %></div>
         <div class="card-body table-responsive">
+          <% if(session['QuyenHan'] !== "Khách hàng" &&
+          session['isAuthenticated'] === true ){ %>
           <a href="/sach/them" class="btn btn-primary mb-2"
             ><i class="bi bi-plus-lg"></i> Thêm sách</a
           >
+          <% } %>
           <table class="table table-bordered table-hover table-sm mb-0">
             <thead>
               <tr>
@@ -39,8 +42,10 @@
                 <th>Đánh giá</th>
                 <th>Số lượng</th>
                 <th>Giá bán</th>
+                <% if(session['QuyenHan'] === 'admin') { %>
                 <th width="5%">Sửa</th>
                 <th width="5%">Xóa</th>
+                <% } %>
               </tr>
             </thead>
             <tbody>
@@ -72,6 +77,7 @@
                 </td>
                 <td class="align-middle"><%= s.SoLuong %></td>
                 <td class="align-middle"><%= s.GiaBan %> VNĐ</td>
+                <% if(session['QuyenHan'] === 'admin') { %>
                 <td class="align-middle text-center">
                   <a href="/sach/sua/<%= s._id %>"
                     ><i class="bi bi-pencil-square"></i
@@ -85,6 +91,7 @@
                     <i class="bi bi-trash text-danger"></i>
                   </a>
                 </td>
+                <% } %>
               </tr>
               <% }); %>
             </tbody>

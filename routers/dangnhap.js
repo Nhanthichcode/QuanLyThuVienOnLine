@@ -138,7 +138,7 @@ router.get("/dangxuat", async (req, res) => {
     delete req.session.MaNguoiDung;
     delete req.session.HoVaTen;
     delete req.session.QuyenHan;
-
+    req.session.isAuthenticated = false;
     res.redirect("/");
   } else {
     req.session.error = "Người dùng chưa đăng nhập.";
