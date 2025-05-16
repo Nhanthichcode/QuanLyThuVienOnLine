@@ -38,6 +38,7 @@
         min-height: 400px;
         overflow-y: auto;
         padding-right: 8px;
+        position: relative;
       }
       .main-book-list .card {
         margin-bottom: 16px;
@@ -62,77 +63,352 @@
       .main-book-list .card:hover .add-to-cart {
         transform: scale(1.08);
       }
+
+      /* Thiết kế hiện đại hơn cho thẻ sách */
       .book-glass-card {
-        min-height: 260px;
-        max-height: 340px;
-        background: #222;
-        border-radius: 18px;
+        min-height: 300px;
+        max-height: 380px;
+        background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+        border-radius: 16px;
         overflow: hidden;
         position: relative;
+        transition: all 0.35s ease;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        border: none;
       }
+
+      .book-glass-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      }
+
       .book-img {
         width: 100%;
         height: 100%;
-        min-height: 220px;
-        max-height: 320px;
+        min-height: 270px;
+        max-height: 340px;
         object-fit: cover;
         display: block;
-        border-radius: 18px;
-        transition: transform 0.3s;
+        transition: transform 0.5s ease;
       }
+
       .book-glass-card:hover .book-img {
-        transform: scale(1.04);
-        filter: brightness(0.95) blur(1px);
+        transform: scale(1.07);
       }
+
       .book-info-glass {
-        background: rgba(30, 30, 40, 0.68);
-        backdrop-filter: blur(6px);
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
+        background: rgba(20, 20, 30, 0.8);
+        backdrop-filter: blur(10px);
+        border-radius: 0;
         color: #fff;
-        box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.18);
+        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.3);
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
+        padding: 15px;
+        transform: translateY(0);
+        transition: transform 0.35s ease;
       }
+
+      .book-glass-card:hover .book-info-glass {
+        transform: translateY(-5px);
+      }
+
+      .book-info-glass .card-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        transition: color 0.2s;
+      }
+
+      .book-glass-card:hover .card-title {
+        color: #4dabff;
+      }
+
+      .book-info-glass .badge {
+        position: absolute;
+        top: -34px;
+        right: 10px;
+        background: linear-gradient(135deg, #ff5e62, #ff9966);
+        font-weight: 600;
+        padding: 6px 12px;
+        border-radius: 8px;
+        box-shadow: 0 3px 10px rgba(255, 94, 98, 0.3);
+        transform: rotate(0deg);
+        transition: all 0.3s ease;
+      }
+
+      .book-glass-card:hover .book-info-glass .badge {
+        transform: rotate(-5deg) scale(1.1);
+      }
+
       .book-info-glass .btn-outline-light {
-        border-color: #fff;
+        border-color: rgba(255, 255, 255, 0.7);
         color: #fff;
-        padding: 0.2rem 0.6rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 6px;
+        transition: all 0.25s ease;
       }
+
       .book-info-glass .btn-outline-light:hover {
         background: #fff;
         color: #222;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(255, 255, 255, 0.2);
       }
+
+      .book-info-glass .btn-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        border: none;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        transition: all 0.25s ease;
+      }
+
+      .book-info-glass .btn-success:hover {
+        background: linear-gradient(135deg, #218838, #1ca984);
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(40, 167, 69, 0.3);
+      }
+
+      /* Nút lên đầu danh sách - Cải thiện hiển thị */
+      .back-to-list-top {
+        position: sticky;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0d6efd, #0099ff);
+        color: white;
+        border: none;
+        cursor: pointer;
+        opacity: 0;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.5);
+        margin: 20px auto 0;
+      }
+
+      .back-to-list-top.show {
+        opacity: 0.95;
+        animation: pulse 2s infinite;
+      }
+
+      .back-to-list-top:hover {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.1);
+        background: linear-gradient(135deg, #0a58ca, #0085e8);
+        animation: none;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 10px rgba(13, 110, 253, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(13, 110, 253, 0);
+        }
+      }
+
+      /* Icon trong nút */
+      .back-to-list-top i {
+        font-size: 1.6rem;
+        transition: transform 0.2s;
+      }
+
+      .back-to-list-top:hover i {
+        transform: translateY(-3px);
+      }
+
+      /* Tooltip cho nút lên đầu danh sách */
+      .top-btn-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        margin-bottom: 8px;
+      }
+
+      .top-btn-tooltip:after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+      }
+
+      .back-to-list-top.clicked {
+        animation: click-effect 0.3s ease;
+      }
+
+      .back-to-list-top.animated-in {
+        animation: bounce-in 0.5s ease;
+      }
+
+      @keyframes click-effect {
+        0% {
+          transform: translateX(-50%) scale(1);
+        }
+        50% {
+          transform: translateX(-50%) scale(0.9);
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      @keyframes bounce-in {
+        0% {
+          transform: translateX(-50%) scale(0);
+        }
+        50% {
+          transform: translateX(-50%) scale(1.2);
+        }
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      /* Nút lên đầu trang web */
+      .back-to-top {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #0d6efd, #0099ff);
+        color: white;
+        border: none;
+        cursor: pointer;
+        opacity: 0;
+        transform: translateY(100px);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.5);
+      }
+
+      .back-to-top.show {
+        opacity: 1;
+        transform: translateY(0);
+        animation: pulse 2s infinite;
+      }
+
+      .back-to-top:hover {
+        animation: none;
+        transform: scale(1.1);
+      }
+
+      /* Icon */
+      .back-to-top i {
+        font-size: 1.4rem;
+        transition: transform 0.2s;
+      }
+
+      .back-to-top:hover i {
+        transform: translateY(-3px);
+      }
+
+      /* Hiệu ứng loading cho nút xem thêm */
+      #loadMoreBtn {
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #0d6efd, #0099ff);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 20px;
+        font-weight: 500;
+        box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+      }
+
+      #loadMoreBtn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(13, 110, 253, 0.4);
+        background: linear-gradient(135deg, #0a58ca, #0085e8);
+      }
+
+      #loadMoreBtn:active {
+        transform: translateY(-1px);
+      }
+
       @media (max-width: 767.98px) {
         .book-glass-card {
-          min-height: 180px;
-          max-height: 220px;
+          min-height: 220px;
+          max-height: 280px;
         }
+
         .book-img {
-          min-height: 140px;
-          max-height: 180px;
+          min-height: 180px;
+          max-height: 240px;
         }
+
         .book-info-glass {
-          font-size: 0.95em;
-          padding: 0.7em 1em;
+          padding: 10px;
+        }
+
+        .book-info-glass .card-title {
+          font-size: 0.95rem;
+        }
+
+        .book-info-glass .badge {
+          font-size: 0.85rem;
+          top: -30px;
+          padding: 4px 8px;
+        }
+
+        .back-to-list-top {
+          width: 44px;
+          height: 44px;
+        }
+
+        .back-to-top {
+          bottom: 20px;
+          right: 20px;
+          width: 40px;
+          height: 40px;
+        }
+
+        .back-to-top i,
+        .back-to-list-top i {
+          font-size: 1.2rem;
         }
       }
+
       @media (max-width: 991.98px) {
         .main-book-list {
           max-height: 400px;
         }
       }
+
       @media (max-width: 767.98px) {
         .main-book-list {
           max-height: 300px;
         }
       }
-      .book-img {
-        height: 120px;
-        object-fit: cover;
-      }
+
       .sidebar-section {
         max-height: 320px;
         overflow-y: auto;
@@ -143,18 +419,23 @@
     <%- include('navbar') %>
     <div class="container text-center my-4">
       <h1 class="display-4">Khám phá hàng nghìn cuốn sách tuyệt vời</h1>
-      <p class="lead text-muted">Thư viện online dành cho mọi độc giả.</p>
+      <p class="text-secondary form-label">
+        Thư viện online dành cho mọi độc giả.
+      </p>
     </div>
 
     <main class="container py-4">
       <div class="row">
         <!-- Danh sách sách (bên trái) -->
-        <div class="col-md-9">
-          <h2 class="mb-4 text-start"><%= title %></h2>
-          <div class="main-book-list">
+        <div class="col-md-9" id="sachListSection">
+          <h2 class="mb-4 text-start" id="top_list"><%= title %></h2>
+          <div class="main-book-list" id="bookListContainer">
             <% if (sach && sach.length > 0) { %>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-              <% sach.forEach(function(book) { %>
+            <div
+              class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"
+              id="bookContainer"
+            >
+              <% sach.slice(0, 5).forEach(function(book) { %>
               <div class="col">
                 <div
                   class="card h-100 shadow-sm border-0 position-relative overflow-hidden book-glass-card"
@@ -163,23 +444,13 @@
                     src="/uploads/<%= book.HinhAnh %>"
                     class="card-img book-img"
                     alt="<%= book.TieuDe %>"
-                    style="
-                      object-fit: cover;
-                      width: 100%;
-                      height: 100%;
-                      min-height: 220px;
-                      max-height: 320px;
-                    "
                     onerror="this.onerror=null;this.src='/uploads/null.png';"
                   />
                   <!-- Glass info footer -->
                   <div
                     class="book-info-glass w-100 px-3 py-2 position-absolute bottom-0 start-0"
                   >
-                    <h5
-                      class="card-title text-truncate mb-1 text-white"
-                      style="font-size: 1.08em"
-                    >
+                    <h5 class="card-title text-truncate mb-1 text-white">
                       <%= book.TieuDe %>
                     </h5>
                     <div
@@ -204,7 +475,7 @@
                           class="btn btn-outline-light btn-sm me-1"
                           title="Chi tiết"
                         >
-                          <i class="bi bi-info-circle"> Chi tiết</i>
+                          <i class="bi bi-info-circle"></i> Chi tiết
                         </a>
                         <% if(session.QuyenHan !=='admin') { %>
                         <button
@@ -223,7 +494,20 @@
               </div>
               <% }); %>
             </div>
-            <% } else { %>
+
+            <!-- Nút lên đầu danh sách -->
+            <button class="back-to-list-top" title="Lên đầu danh sách">
+              <i class="bi bi-arrow-up-circle-fill"></i>
+              <span class="visually-hidden">Lên đầu danh sách</span>
+            </button>
+
+            <% if (sach.length > 10) { %>
+            <div class="text-center mt-4">
+              <button id="loadMoreBtn" class="btn btn-primary">
+                Xem thêm <i class="bi bi-arrow-down-circle"></i>
+              </button>
+            </div>
+            <% } %> <% } else { %>
             <p class="text-center">Không có sách nào được tìm thấy.</p>
             <% } %>
           </div>
@@ -256,14 +540,14 @@
                 href="/sach/sach_chitiet/<%= book._id %>"
                 class="d-block mb-3 nav-link"
               >
-                <h6 class="mb-1"><%= book.TenSach %></h6>
+                <h6 class="mb-1"><%= book.TieuDe %></h6>
                 <p class="text-warning">
                   <i class="bi bi-eye-fill"></i> <%= book.LuotXem %> lượt xem
                 </p>
                 <img
                   src="/uploads/<%= book.HinhAnh %>"
                   class="img-fluid rounded"
-                  alt="<%= book.TenSach %>"
+                  alt="<%= book.TieuDe %>"
                   onerror="this.onerror=null;this.src='/uploads/null.png';"
                 />
               </a>
@@ -275,43 +559,260 @@
       </div>
     </main>
 
-    <!-- Footer -->
-    <%- include('footer') %> <%- include('javascript') %>
+    <!-- Nút lên đầu trang web -->
+    <button class="back-to-top" title="Lên đầu trang">
+      <i class="bi bi-arrow-up"></i>
+    </button>
+
+    <%- include ('footer') %> <%- include('javascript') %>
 
     <script>
+      // Add to cart function (giữ nguyên)
       async function addToCart(sachId) {
         try {
-          var taikhoanID = "<%= session.MaNguoiDung %>";
-          if (taikhoanID == null || taikhoanID == "") {
+          const taikhoanID = "<%= session.MaNguoiDung %>";
+          if (!taikhoanID) {
             alert("Vui lòng đăng nhập để thêm sách vào giỏ hàng.");
             window.location.href = "/dangnhap";
             return;
           }
 
-          const response = await fetch("/giohang/them/" + sachId, {
+          const response = await fetch(`/giohang/them/${sachId}`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({
-              sachId: sachId,
-              soLuong: 1,
-            }),
           });
 
           const data = await response.json();
-
           if (data.success) {
             alert("Thêm sách vào giỏ hàng thành công!");
-            setTimeout(() => location.reload(), 500);
+            location.reload();
           } else {
             alert(data.message || "Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
           }
         } catch (error) {
-          console.log("Lỗi:" + error);
+          console.error("Lỗi:", error);
           alert("Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
         }
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Phần xử lý danh sách sách
+        const bookContainer = document.getElementById("bookContainer");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+        let allBooks = [];
+        const booksPerPage = 5;
+        let currentPage = 1;
+        let isLoading = false;
+
+        try {
+          const booksData = `<%- JSON.stringify(sach || []) %>`;
+          allBooks = JSON.parse(booksData.replace(/&quot;/g, '"'));
+        } catch (error) {
+          console.error("Error parsing books data:", error);
+          return;
+        }
+
+        function generateBookHTML(book) {
+          return `
+        <div class="col">
+          <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden book-glass-card">
+            <img
+              src="/uploads/${book.HinhAnh || "null.png"}"
+              class="card-img book-img"
+              alt="${book.TieuDe}"
+              loading="lazy"
+              onerror="this.src='/uploads/null.png';"
+            />
+            <div class="book-info-glass w-100 px-3 py-2 position-absolute bottom-0 start-0">
+              <h5 class="card-title text-truncate mb-1 text-white">
+                ${book.TieuDe}
+              </h5>
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <span class="text-light small">
+                  <i class="bi bi-person"></i> ${book.TacGia}
+                </span>
+                <span class="badge bg-success fs-6 shadow-sm">
+                  ${Number(book.GiaBan).toLocaleString("vi-VN")} đ
+                </span>
+              </div>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-warning small">
+                  <i class="bi bi-eye"></i> ${book.LuotXem || 0}
+                </span>
+                <div>
+                  <a href="/sach/sach_chitiet/${book._id}"
+                    class="btn btn-outline-light btn-sm me-1">
+                    <i class="bi bi-info-circle"></i> Chi tiết
+                  </a>
+                  ${
+                    typeof session !== "undefined" &&
+                    session.QuyenHan !== "admin"
+                      ? `<button
+                        class="btn btn-success btn-sm add-to-cart"
+                        onclick="addToCart('${book._id}')"
+                        title="Thêm vào giỏ hàng">
+                        <i class="bi bi-cart-plus"></i>
+                      </button>`
+                      : ""
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+        }
+
+        function loadBooks(page) {
+          const start = (page - 1) * booksPerPage;
+          return allBooks.slice(start, start + booksPerPage);
+        }
+
+        // Khởi tạo danh sách
+        if (bookContainer) {
+          bookContainer.innerHTML = loadBooks(1)
+            .map((book) => generateBookHTML(book))
+            .join("");
+        }
+
+        // Xử lý nút Xem thêm
+        if (loadMoreBtn && allBooks.length > booksPerPage) {
+          loadMoreBtn.addEventListener("click", async function () {
+            if (isLoading) return;
+
+            try {
+              isLoading = true;
+              this.disabled = true;
+              this.innerHTML =
+                '<span class="spinner-border spinner-border-sm"></span> Đang tải...';
+
+              currentPage++;
+              const nextBooks = loadBooks(currentPage);
+
+              await new Promise((resolve) => setTimeout(resolve, 300));
+
+              if (nextBooks.length > 0) {
+                bookContainer.insertAdjacentHTML(
+                  "beforeend",
+                  nextBooks.map((book) => generateBookHTML(book)).join("")
+                );
+              }
+
+              if (currentPage * booksPerPage >= allBooks.length) {
+                this.style.display = "none";
+              }
+            } catch (error) {
+              console.error("Lỗi khi tải sách:", error);
+            } finally {
+              isLoading = false;
+              this.disabled = false;
+              this.innerHTML =
+                'Xem thêm <i class="bi bi-arrow-down-circle"></i>';
+            }
+          });
+        }
+
+        // Lấy các phần tử nút lên đầu trang và lên đầu danh sách
+        const backToTopBtn = document.querySelector(".back-to-top");
+        const backToListTopBtn = document.querySelector(".back-to-list-top");
+        const bookListContainer = document.getElementById("bookListContainer");
+
+        // Thêm tooltip cho nút lên đầu danh sách
+        if (backToListTopBtn) {
+          const tooltip = document.createElement("div");
+          tooltip.classList.add("top-btn-tooltip");
+          tooltip.textContent = "Lên đầu danh sách";
+          backToListTopBtn.appendChild(tooltip);
+
+          backToListTopBtn.addEventListener("mouseenter", () => {
+            tooltip.style.opacity = "1";
+            tooltip.style.transform = "translateY(-10px)";
+          });
+
+          backToListTopBtn.addEventListener("mouseleave", () => {
+            tooltip.style.opacity = "0";
+            tooltip.style.transform = "translateY(0)";
+          });
+        }
+
+        // Hiển thị nút lên đầu trang khi cuộn trang
+        window.addEventListener("scroll", () => {
+          // Hiển thị nút khi cuộn > 200px
+          backToTopBtn.classList.toggle("show", window.scrollY > 200);
+        });
+
+        // Cải thiện function kiểm tra hiển thị nút lên đầu danh sách
+        function updateListTopButtonVisibility() {
+          if (bookListContainer && backToListTopBtn) {
+            if (bookListContainer.scrollTop > 150) {
+              backToListTopBtn.classList.add("show");
+              // Thêm hiệu ứng xuất hiện với animation
+              if (!backToListTopBtn.classList.contains("animated-in")) {
+                backToListTopBtn.classList.add("animated-in");
+                setTimeout(() => {
+                  backToListTopBtn.classList.remove("animated-in");
+                }, 500);
+              }
+            } else {
+              backToListTopBtn.classList.remove("show");
+            }
+          }
+        }
+
+        // Hiển thị nút lên đầu danh sách khi cuộn trong container danh sách
+        if (bookListContainer) {
+          bookListContainer.addEventListener(
+            "scroll",
+            updateListTopButtonVisibility
+          );
+          // Kiểm tra định kỳ vị trí cuộn để đảm bảo nút luôn hoạt động chính xác
+          setInterval(updateListTopButtonVisibility, 500);
+        }
+
+        // Xử lý click nút lên đầu trang
+        if (backToTopBtn) {
+          backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+        }
+
+        // Cải thiện sự kiện click nút lên đầu danh sách
+        if (backToListTopBtn && bookListContainer) {
+          backToListTopBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            // Thêm hiệu ứng nhấp nháy khi click
+            backToListTopBtn.classList.add("clicked");
+            setTimeout(() => {
+              backToListTopBtn.classList.remove("clicked");
+            }, 300);
+
+            // Cuộn mượt lên đầu danh sách
+            bookListContainer.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          });
+        }
+
+        // Hiệu ứng hover cho các nút
+        [backToTopBtn, backToListTopBtn].forEach((btn) => {
+          if (btn) {
+            btn.addEventListener("mouseenter", () => {
+              const icon = btn.querySelector("i");
+              if (icon) icon.style.transform = "translateY(-3px)";
+            });
+
+            btn.addEventListener("mouseleave", () => {
+              const icon = btn.querySelector("i");
+              if (icon) icon.style.transform = "translateY(0)";
+            });
+          }
+        });
+      });
     </script>
   </body>
 </html>
