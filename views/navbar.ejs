@@ -6,8 +6,11 @@
 
   /* Navbar container */
   .navbar-custom {
-    background: linear-gradient(90deg, #ff5858 0%, #f09819 55%, #a770ef 100%);
+    background: linear-gradient(90deg, #e99696 0%, #f09819 55%, #8167a3 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    margin-top: 1rem;
   }
 
   /* Brand/logo */
@@ -33,11 +36,59 @@
     border-radius: 4px;
     padding: 0.45rem 0.9rem;
   }
-
+  .small:hover {
+    /* text-shadow: 0 0 5px currentColor, 0 0 10px currentColor; */
+    transform: translateY(-1px);
+    font-size: 1.2em;
+  }
+  .alert-danger {
+    text-shadow: 0 0 60px rgb(128, 38, 0), rgb(255, 109, 47) reenyellow;
+    box-shadow: 0 0 10px rgb(128, 13, 0), 0 0 5px rgb(242, 162, 25);
+  }
+  .alert-success {
+    text-shadow: 0 0 60px green, 0 0 60px greenyellow;
+    box-shadow: 0 0 10px green, 0 0 5px greenyellow;
+  }
+  .dropdown-item:hover,
+  .dropdown-toggle:hover,
+  .nav-link:hover:not(.d-block) {
+    box-shadow: 0 0 40px currentColor, 0 0 40px currentColor;
+    transform: translateY(-1px);
+  }
+  .btn-success:hover {
+    box-shadow: 0 0 30px greenyellow, 0 0 20px green;
+    transform: translateY(-1px);
+  }
+  .btn-danger:hover {
+    box-shadow: 0 0 30px rgb(233, 147, 26), 0 0 20px rgb(221, 113, 46);
+    transform: translateY(-1px);
+  }
+  .text-warning:hover {
+    text-shadow: 0 0 30px rgb(233, 147, 26), 0 0 40px rgb(221, 113, 46);
+    transform: translateY(-1px);
+  }
+  .btn-secondary:hover {
+    box-shadow: 0 0 30px rgb(49, 214, 236), 0 0 20px rgb(72, 217, 36);
+    transform: translateY(-1px);
+  }
+  .btn-outline-primary:hover {
+    box-shadow: 0 0 30px rgb(49, 214, 236), 0 0 20px rgb(72, 217, 36);
+    transform: translateY(-1px);
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgb(62, 100, 226), 0 0 20px rgb(36, 178, 217);
+    transform: translateY(-1px);
+  }
+  .navbar-brand:hover {
+    text-shadow: 0 0 30px rgb(255, 255, 255), 0 0 20px rgb(204, 20, 221);
+    transform: translateY(-1px);
+  }
   .navbar-nav .nav-link:hover,
   .navbar-nav .nav-link.active {
     background: rgba(255, 255, 255, 0.13);
-    color: #ffe066 !important;
+    color: #3ce89b !important;
+    transition: all 0.4s ease-in-out;
+    z-index: -1;
   }
 
   /* Cart & Rent buttons */
@@ -145,48 +196,91 @@
   }
 
   .login-status.logged-in {
-    background: rgba(218, 59, 221, 0.496);
-    border: 1px solid rgba(0, 255, 60, 0.3);
+    background: rgba(232, 148, 233, 0.26);
+    border: 1px solid rgba(255, 0, 0, 0.533);
+    color: whitesmoke;
   }
 
   .login-status.logged-out {
     background: rgba(255, 206, 58, 0.397);
     border: 1px solid rgba(152, 255, 7, 0.385);
   }
+  /* maquee */
+  .announcement-container {
+    margin: auto;
+
+    padding: 0 1rem;
+  }
+
+  .announcement {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .announcement marquee {
+    display: flex;
+    align-items: center;
+    height: 24px;
+  }
+
+  .announcement-text {
+    color: #333;
+    font-size: 0.9rem;
+    margin: 0 0.5rem;
+  }
+
+  .announcement i {
+    font-size: 1rem;
+    vertical-align: middle;
+  }
+
+  /* Dark theme support */
+  .dark-theme-mode .announcement {
+    background: rgba(45, 45, 45, 0.9);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .dark-theme-mode .announcement-text {
+    color: #fff;
+  }
 
   /* Responsive */
   @media (max-width: 576px) {
-    .navbar-brand {
-      font-size: 1.05rem;
+    .navbar-custom {
+      border-radius: 30px;
+      margin-top: 0.5rem;
     }
+  }
 
-    .navbar-nav .nav-link {
-      padding: 0.4rem 0.7rem;
-      font-size: 0.98em;
-    }
+  .navbar-nav .nav-link {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.98em;
+  }
 
-    .navbar .form-control {
-      min-width: 100px;
-      font-size: 0.95em;
-    }
+  .navbar .form-control {
+    min-width: 100px;
+    font-size: 0.95em;
+  }
 
-    .theme-container {
-      margin: 0.5rem 0;
-      padding: 0.3rem;
-    }
+  .theme-container {
+    margin: 0.5rem 0;
+    padding: 0.3rem;
+  }
 
-    .theme-switch {
-      width: 30px;
-      height: 30px;
-    }
+  .theme-switch {
+    width: 30px;
+    height: 30px;
+  }
 
-    .theme-label {
-      font-size: 0.8rem;
-    }
+  .theme-label {
+    font-size: 0.8rem;
   }
 </style>
 
-<link rel="stylesheet" href="/CSS/theme.css" />
+<link rel="stylesheet" href="/CSS/theme.css" hidden />
 <nav class="container navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">
@@ -342,6 +436,33 @@
     </div>
   </div>
 </nav>
+<!-- Announcement Marquee -->
+<div class="container mt-3">
+  <div class="announcement">
+    <marquee behavior="scroll" direction="left">
+      <span class="text-warning announcement-text"
+        >Web hiển thị đẹp nhất ở chế độ TỐI</span
+      >
+      <i class="bi bi-megaphone-fill text-warning"></i>
+      <span class="announcement-text"
+        >Chào mừng đến với Thư Viện Online! 📚 Khám phá hàng ngàn đầu sách hấp
+        dẫn</span
+      >
+      <span class="mx-4">|</span>
+      <i class="bi bi-stars text-warning"></i>
+      <span class="announcement-text"
+        >Ưu đãi đặc biệt: Giảm 20% phí thuê sách khi đăng ký thành viên
+        mới</span
+      >
+      <span class="mx-4">|</span>
+      <i class="bi bi-bell-fill text-warning"></i>
+      <span class="announcement-text"
+        >Cập nhật: Thêm nhiều đầu sách mới trong tháng này</span
+      >
+    </marquee>
+  </div>
+</div>
+
 <!-- Theme Switcher Script -->
 <script>
   function toggleTheme() {

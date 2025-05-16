@@ -2,9 +2,10 @@ var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcryptjs");
 var TaiKhoan = require("../models/taikhoan");
+const { isAuth, isAdmin } = require("../middlewares/auth");
 
 // GET: Lấy danh sách tài khoản
-router.get("/", async (req, res) => {
+router.get("/", isAdmin, async (req, res) => {
   try {
     var taikhoans = await TaiKhoan.find().exec();
     res.render("taikhoan", {
@@ -21,14 +22,14 @@ router.get("/", async (req, res) => {
 });
 
 // GET: Thêm tài khoản
-router.get("/them", async (req, res) => {
+router.get("/them", isAdmin, async (req, res) => {
   res.render("taikhoan_them", {
     title: "Thêm tài khoản",
   });
 });
 
 // POST: Thêm tài khoản
-router.post("/them", async (req, res) => {
+router.post("/them", isAdmin, async (req, res) => {
   var salt = bcrypt.genSaltSync(10);
   var data = {
     HoVaTen: req.body.HoVaTen,
@@ -42,7 +43,7 @@ router.post("/them", async (req, res) => {
 });
 
 // GET: Sửa tài khoản
-router.get("/sua/:id", async (req, res) => {
+router.get("/sua/:id", isAdmin, async (req, res) => {
   var id = req.params.id;
   var tk = await TaiKhoan.findById(id);
   res.render("taikhoan_sua", {
@@ -52,7 +53,7 @@ router.get("/sua/:id", async (req, res) => {
 });
 
 // GET: tài khoản của tôi
-router.get("/cuatoi/:id", async (req, res) => {
+router.get("/cuatoi/:id", isAuth, async (req, res) => {
   var id = req.params.id;
   var tk = await TaiKhoan.findById(id);
   res.render("taikhoan_cuatoi", {
@@ -62,7 +63,7 @@ router.get("/cuatoi/:id", async (req, res) => {
 });
 
 // POST: Sửa tài khoản
-router.post("/sua/:id", async (req, res) => {
+router.post("/sua/:id", isAuth, async (req, res) => {
   var id = req.params.id;
   var salt = bcrypt.genSaltSync(10);
   var data = {
@@ -84,7 +85,7 @@ router.post("/sua/:id", async (req, res) => {
 });
 
 // GET: Xóa tài khoản
-router.get("/xoa/:id", async (req, res) => {
+router.get("/xoa/:id", isAdmin, async (req, res) => {
   var id = req.params.id;
   await TaiKhoan.findByIdAndDelete(id);
   res.redirect("/taikhoan");

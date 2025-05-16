@@ -2,15 +2,11 @@ const express = require("express");
 const router = express.Router();
 const GioHang = require("../models/giohang");
 const TaiKhoan = require("../models/taikhoan"); // Add this line
-const { parse } = require("dotenv");
+const { isAuth } = require("../middlewares/auth");
 
 // Lấy giỏ hàng của người dùng
-router.get("/", async (req, res) => {
+router.get("/", isAuth, async (req, res) => {
   try {
-    if (!req.session.MaNguoiDung) {
-      return res.redirect("/dangnhap");
-    }
-
     console.log("User ID in session:", req.session.MaNguoiDung);
 
     const gioHang = await GioHang.findOne({
@@ -35,7 +31,7 @@ router.get("/", async (req, res) => {
   }
 });
 //POST: Thêm sách vào giỏ hàng
-router.post("/them/:sachId", async (req, res) => {
+router.post("/them/:sachId", isAuth, async (req, res) => {
   try {
     // Kiểm tra đăng nhập
     if (!req.session.MaNguoiDung) {
@@ -99,15 +95,8 @@ router.post("/them/:sachId", async (req, res) => {
 });
 
 // POST: Cập nhật số lượng sách trong giỏ hàng
-router.post("/capnhat/:sachId", async (req, res) => {
+router.post("/capnhat/:sachId", isAuth, async (req, res) => {
   try {
-    if (!req.session.MaNguoiDung) {
-      return res.status(401).json({
-        success: false,
-        message: "Vui lòng đăng nhập",
-      });
-    }
-
     const sachId = req.params.sachId;
     const soLuongMoi = parseInt(req.body.soLuong);
 
@@ -164,15 +153,8 @@ router.post("/capnhat/:sachId", async (req, res) => {
 });
 
 // POST: Xóa sách khỏi giỏ hàng
-router.post("/xoa/:sachId", async (req, res) => {
+router.post("/xoa/:sachId", isAuth, async (req, res) => {
   try {
-    if (!req.session.MaNguoiDung) {
-      return res.status(401).json({
-        success: false,
-        message: "Vui lòng đăng nhập",
-      });
-    }
-
     const sachId = req.params.sachId;
 
     // Tìm và cập nhật giỏ hàng

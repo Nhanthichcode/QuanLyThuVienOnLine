@@ -2,10 +2,10 @@ var express = require("express");
 var router = express.Router();
 var ChuDe = require("../models/chude");
 var KhuVuc = require("../models/khuvuc");
-const { any } = require("webidl-conversions");
+const { isAdmin } = require("../middlewares/auth");
 
 // GET: Danh sách chủ đề
-router.get("/", async (req, res) => {
+router.get("/", isAdmin, async (req, res) => {
   try {
     var cd = await ChuDe.find().populate("KhuVuc");
     res.render("chude", {
@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET: Thêm chủ đề
-router.get("/them", async (req, res) => {
+router.get("/them", isAdmin, async (req, res) => {
   var kv = await KhuVuc.find();
   var cd = await ChuDe.find();
   res.render("chude_them", {
@@ -33,7 +33,7 @@ router.get("/them", async (req, res) => {
 });
 
 // POST: Thêm chủ đề
-router.post("/them", async (req, res) => {
+router.post("/them", isAdmin, async (req, res) => {
   try {
     if (!req.body.TenChuDe || req.body.TenChuDe.trim() === "") {
       return res.status(400).render("chude_them", {
@@ -74,7 +74,7 @@ router.post("/them", async (req, res) => {
 });
 
 // GET: Sửa chủ đề
-router.get("/sua/:id", async (req, res) => {
+router.get("/sua/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     var cd = await ChuDe.findById(id).populate("KhuVuc");
@@ -100,7 +100,7 @@ router.get("/sua/:id", async (req, res) => {
 });
 
 // POST: Sửa chủ đề
-router.post("/sua/:id", async (req, res) => {
+router.post("/sua/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     if (!req.body.TenChuDe || req.body.TenChuDe.trim() === "") {
@@ -133,7 +133,7 @@ router.post("/sua/:id", async (req, res) => {
 });
 
 // GET: Xóa chủ đề
-router.get("/xoa/:id", async (req, res) => {
+router.get("/xoa/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     var cd = await ChuDe.findById(id);

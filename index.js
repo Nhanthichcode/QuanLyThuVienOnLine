@@ -62,7 +62,6 @@ app.use((req, res, next) => {
   res.locals.message = "";
   if (err) res.locals.message = '<span class="text-danger">' + err + "</span>";
   if (msg) res.locals.message = '<span class="text-success">' + msg + "</span>";
-
   next();
 });
 

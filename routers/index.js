@@ -3,6 +3,7 @@ var router = express.Router();
 var firstImage = require("../modules/firstimage");
 var ChuDe = require("../models/chude");
 var Sach = require("../models/sach");
+const { isUser, isAdmin } = require("../middlewares/auth");
 
 // GET: Trang chủ
 router.get("/", async (req, res) => {
@@ -31,7 +32,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET: Thuê sách
-router.get("/thuesach", async (req, res) => {
+router.get("/thuesach", isUser, async (req, res) => {
   var sach = await Sach.find();
   res.render("thuesach", {
     sach: sach,

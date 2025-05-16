@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var KhuVuc = require("../models/khuvuc");
+const { isAdmin } = require("../middlewares/auth");
 
 // GET: Danh sách khu vực
 router.get("/", async (req, res) => {
@@ -20,7 +21,7 @@ router.get("/", async (req, res) => {
 });
 
 // POST: Thêm khu vực
-router.get("/them", async (req, res) => {
+router.get("/them", isAdmin, async (req, res) => {
   try {
     res.render("khuvuc_them", {
       title: "Thêm khu vực",
@@ -34,7 +35,7 @@ router.get("/them", async (req, res) => {
   }
 });
 // POST: Xử lý thêm khu vực
-router.post("/them", async (req, res) => {
+router.post("/them", isAdmin, async (req, res) => {
   try {
     if (!req.body.TenKhuVuc || req.body.TenKhuVuc.trim() === "") {
       return res.status(400).render("khuvuc_them", {
@@ -73,9 +74,8 @@ router.post("/them", async (req, res) => {
     });
   }
 });
-
 // GET: Sửa khu vực
-router.get("/sua/:id", async (req, res) => {
+router.get("/sua/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     var kv = await KhuVuc.findById(id);
@@ -98,7 +98,7 @@ router.get("/sua/:id", async (req, res) => {
   }
 });
 // POST: Xử lý sửa khu vực
-router.post("/sua/:id", async (req, res) => {
+router.post("/sua/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     if (!req.body.TenKhuVuc || req.body.TenKhuVuc.trim() === "") {
@@ -129,14 +129,8 @@ router.post("/sua/:id", async (req, res) => {
     });
   }
 });
-
-// // Xóa khu vực
-// router.get("/xoa/:id", async (req, res) => {
-//   await KhuVuc.findByIdAndDelete(req.params.id);
-//   res.redirect("/khuvuc");
-// });
-// Get: Xóa khu vực
-router.get("/xoa/:id", async (req, res) => {
+// GET: xóa chủ đề
+router.get("/xoa/:id", isAdmin, async (req, res) => {
   try {
     var id = req.params.id;
     var kv = await KhuVuc.findById(id);

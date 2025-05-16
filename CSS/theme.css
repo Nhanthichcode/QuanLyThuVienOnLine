@@ -36,6 +36,16 @@
   color: #fff;
 }
 
+.dropdown-item:hover,
+.dropdown-toggle:hover {
+  box-shadow: 0 0 40px currentColor, 0 0 40px currentColor;
+  transform: translateY(-1px);
+}
+.small:hover {
+  text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  transform: translateY(-1px);
+  font-size: 1.2em;
+}
 .dark-theme-mode .table tbody tr {
   border-bottom: 1px solid #e4b2b2;
 }
@@ -53,6 +63,9 @@
   background-color: #ffffff;
   border-color: #404040;
   color: #000000;
+}
+.dark-theme-mode .form-check-label {
+  color: #eaeaea;
 }
 
 .dark-theme-mode .form-control:focus {
@@ -104,4 +117,7 @@ input[type="text"]::placeholder {
 
 .dark-theme-mode a:not(.btn):hover {
   color: #357abd;
+}
+.noidung {
+  color: #000000; /* Màu chữ khi gõ */
 }

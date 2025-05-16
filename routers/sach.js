@@ -6,6 +6,7 @@ var ChuDe = require("../models/chude");
 var multer = require("multer");
 var path = require("path");
 var firstImage = require("../modules/firstimage");
+const { isAdmin } = require("../middlewares/auth");
 
 // Kiểm tra và tạo thư mục nếu chưa tồn tại
 var uploadDir = path.join(__dirname, "../middlewares/uploads");
@@ -57,7 +58,7 @@ router.get("/", async (req, res) => {
   }
 });
 // POST: Thêm sách
-router.get("/them", async (req, res) => {
+router.get("/them", isAdmin, async (req, res) => {
   try {
     var cd = await ChuDe.find();
     res.render("sach_them", {
@@ -74,7 +75,7 @@ router.get("/them", async (req, res) => {
   }
 });
 // POST: Xử lý thêm sách
-router.post("/them", upload.single("HinhAnh"), async (req, res) => {
+router.post("/them", isAdmin, upload.single("HinhAnh"), async (req, res) => {
   try {
     var data = {
       ChuDe: req.body.ChuDe,
@@ -109,7 +110,7 @@ router.post("/them", upload.single("HinhAnh"), async (req, res) => {
 });
 
 // GET: Xóa sách
-router.get("/xoa/:id", async (req, res) => {
+router.get("/xoa/:id", isAdmin, async (req, res) => {
   try {
     var sach = await Sach.findByIdAndDelete(req.params.id);
     if (!sach) {
@@ -128,7 +129,7 @@ router.get("/xoa/:id", async (req, res) => {
   }
 });
 // GET: Sửa sách
-router.get("/sua/:id", async (req, res) => {
+router.get("/sua/:id", isAdmin, async (req, res) => {
   try {
     var cd = await ChuDe.find();
     var sach = await Sach.findById(req.params.id).populate("ChuDe");
@@ -152,7 +153,7 @@ router.get("/sua/:id", async (req, res) => {
   }
 });
 // POST: Xử lý sửa sách
-router.post("/sua/:id", upload.single("HinhAnh"), async (req, res) => {
+router.post("/sua/:id", isAdmin, upload.single("HinhAnh"), async (req, res) => {
   try {
     var id = req.params.id;
 
