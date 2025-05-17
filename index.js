@@ -73,8 +73,6 @@ app.use("/sach", sachRouter);
 app.use("/taikhoan", taikhoanRouter);
 app.use("/giohang", gioHangRouter);
 
-app.listen(3001, () => {
-  console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3001");
+app.listen(3003, () => {
+  console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3003");
 });
-
-// Xử lý trang chủ đề và sách

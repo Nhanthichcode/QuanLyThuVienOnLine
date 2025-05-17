@@ -35,7 +35,16 @@
   border-bottom: 2px solid #505050;
   color: #fff;
 }
-
+.dark-theme-mode hr {
+  color: #fff;
+}
+.dark-theme-mode .soluong {
+  color: #fff;
+}
+.dark-theme-mode .btn-outline-secondary {
+  box-shadow: 0 0 15px whitesmoke;
+  color: white;
+}
 .dropdown-item:hover,
 .dropdown-toggle:hover {
   box-shadow: 0 0 40px currentColor, 0 0 40px currentColor;
