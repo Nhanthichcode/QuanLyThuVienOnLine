@@ -13,16 +13,30 @@
     />
     <title><%= title %> - Trang tin điện tử</title>
   </head>
-
+  <style>
+    .form-control:hover {
+      font-weight: bold;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 40px #e2e526;
+    }
+  </style>
   <body>
     <div class="container">
       <!-- Menu ngang -->
       <%- include('navbar') %>
 
       <!-- Nội dung chính -->
-      <div class="card mt-3">
-        <div class="card-header"><%= title %></div>
-        <div class="card-body">
+      <div
+        class="card mt-3"
+        style="max-width: 70%; align-items: center; margin: auto"
+      >
+        <div
+          class="card-header"
+          style="width: 100%; align-items: center; text-align: center"
+        >
+          <h2><%= title %></h2>
+        </div>
+        <div class="card-body" style="width: 80%">
           <form
             action="/dangnhap"
             method="post"
@@ -51,17 +65,14 @@
               />
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" style="margin: auto" class="btn btn-primary">
               <i class="bi bi-box-arrow-in-right"></i> Đăng nhập
             </button>
           </form>
         </div>
       </div>
-
-      <!-- Footer -->
-      <%- include('footer') %>
     </div>
-
-    <%- include('javascript') %>
+    <!-- Footer -->
+    <%- include('footer') %> <%- include('javascript') %>
   </body>
 </html>
