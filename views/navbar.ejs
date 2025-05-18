@@ -379,23 +379,32 @@
         </li>
         <% if(session.MaNguoiDung && session.QuyenHan != "admin") { %>
         <li class="nav-item">
-          <a class="nav-link btn-cart position-relative" href="/giohang">
-            <i class="bi bi-cart3 fs-5"></i>
-            <% if(session.gioHang && session.gioHang.length > 0) { %>
-            <span
-              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-            >
-              <%= session.gioHang.length %>
+          <a
+            class="nav-link btn-cart position-relative d-flex align-items-center"
+            href="/giohang"
+          >
+            <span class="cart-icon-wrapper position-relative me-2">
+              <i class="bi bi-cart3 fs-5"></i>
+              <% if(session.gioHang && session.gioHang.length > 0) { %>
+              <span
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                style="font-size: 0.75em"
+              >
+                <%= session.gioHang.length %>
+              </span>
+              <% } %>
             </span>
-            <% } %> Giỏ hàng
+            <span>Giỏ hàng</span>
           </a>
         </li>
+
+        <% } %> <% } %> <% if(session['QuyenHan'] !== 'admin') { %>
         <li class="nav-item">
           <a class="nav-link btn-rent" href="/thuesach">
             <i class="bi bi-bag-check"></i> Thuê sách
           </a>
         </li>
-        <% } %> <% } %>
+        <% }%>
       </ul>
       <!-- Login status -->
       <div

@@ -40,7 +40,9 @@
               <label for="ChuDe" class="form-label">Chủ đề:</label>
               <select id="ChuDe" name="ChuDe" class="form-select" required>
                 <% chude.forEach((cd) => { %>
-                  <option value="<%= cd._id %>" <%= sach.ChuDe && sach.ChuDe.toString() === cd._id.toString() ? "selected" : "" %>><%= cd.TenChuDe %></option>
+                  <option value="<%= cd._id %>" <%= sach.ChuDe && sach.ChuDe.toString() == cd._id.toString() ? "selected" : "" %>>
+                    <%= cd.TenChuDe %>
+                  </option>
                 <% }); %>
               </select>
             </div>

@@ -304,6 +304,7 @@
         border: none;
         cursor: pointer;
         opacity: 0;
+        visibility: hidden; /* Thêm thuộc tính này */
         transform: translateY(100px);
         transition: all 0.3s ease;
         display: flex;
@@ -314,6 +315,7 @@
 
       .back-to-top.show {
         opacity: 1;
+        visibility: visible; /* Thêm thuộc tính này */
         transform: translateY(0);
         animation: pulse 2s infinite;
       }
@@ -435,7 +437,7 @@
               class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"
               id="bookContainer"
             >
-              <% sach.slice(0, 5).forEach(function(book) { %>
+              <% sach.forEach(function(book) { %>
               <div class="col">
                 <div
                   class="card h-100 shadow-sm border-0 position-relative overflow-hidden book-glass-card"
@@ -444,6 +446,7 @@
                     src="/uploads/<%= book.HinhAnh %>"
                     class="card-img book-img"
                     alt="<%= book.TieuDe %>"
+                    loading="lazy"
                     onerror="this.onerror=null;this.src='/uploads/null.png';"
                   />
                   <!-- Glass info footer -->
@@ -477,11 +480,12 @@
                         >
                           <i class="bi bi-info-circle"></i> Chi tiết
                         </a>
-                        <% if(session.QuyenHan !=='admin') { %>
+                        <% if (typeof session !== "undefined" &&
+                        session.QuyenHan !== "admin") { %>
                         <button
                           class="btn btn-success btn-sm add-to-cart"
-                          data-book-id="<%= book._id %>"
                           onclick="addToCart('<%= book._id %>')"
+                          type="button"
                           title="Thêm vào giỏ hàng"
                         >
                           <i class="bi bi-cart-plus"></i>
@@ -496,18 +500,18 @@
             </div>
 
             <!-- Nút lên đầu danh sách -->
-            <button class="back-to-list-top" title="Lên đầu danh sách">
+            <button
+              class="back-to-list-top"
+              id="backToListTopBtn"
+              title="Lên đầu danh sách"
+              type="button"
+              aria-label="Lên đầu danh sách"
+            >
               <i class="bi bi-arrow-up-circle-fill"></i>
               <span class="visually-hidden">Lên đầu danh sách</span>
             </button>
 
-            <% if (sach.length > 10) { %>
-            <div class="text-center mt-4">
-              <button id="loadMoreBtn" class="btn btn-primary">
-                Xem thêm <i class="bi bi-arrow-down-circle"></i>
-              </button>
-            </div>
-            <% } %> <% } else { %>
+            <% if (sach.length > 5) { %> <% } %> <% } else { %>
             <p class="text-center">Không có sách nào được tìm thấy.</p>
             <% } %>
           </div>
@@ -519,14 +523,16 @@
           <div class="card mb-4 sidebar-section">
             <div class="card-body">
               <h4 class="card-title">Chủ đề phổ biến</h4>
-              <% if (typeof chuyenmuc !== "undefined") { %> <%
-              chuyenmuc.forEach(function(cd) { %>
+              <% if (typeof chuyenmuc !== "undefined" && chuyenmuc &&
+              chuyenmuc.length > 0) { %> <% chuyenmuc.forEach(function(cd) { %>
               <a
                 class="btn btn-outline-primary btn-sm mb-1"
                 href="/sach/chude/<%= cd._id %>"
                 ><%= cd.TenChuDe %></a
               >
-              <% }); %> <% } %>
+              <% }); %> <% } else { %>
+              <p class="small text-muted">Chưa có chủ đề nào.</p>
+              <% } %>
             </div>
           </div>
 
@@ -534,7 +540,8 @@
           <div class="card mb-4 sidebar-section">
             <div class="card-body" style="text-decoration: none !important">
               <h4 class="card-title">Xem nhiều nhất</h4>
-              <% if (typeof xemnhieunhat !== "undefined") { %> <%
+              <% if (typeof xemnhieunhat !== "undefined" && xemnhieunhat &&
+              xemnhieunhat.length > 0) { %> <%
               xemnhieunhat.forEach(function(book) { %>
               <a
                 href="/sach/sach_chitiet/<%= book._id %>"
@@ -548,11 +555,13 @@
                   src="/uploads/<%= book.HinhAnh %>"
                   class="img-fluid rounded"
                   alt="<%= book.TieuDe %>"
+                  loading="lazy"
                   onerror="this.onerror=null;this.src='/uploads/null.png';"
                 />
               </a>
-              <hr />
-              <% }); %> <% } %>
+              <% }); %> <% } else { %>
+              <p class="small text-muted">Chưa có dữ liệu.</p>
+              <% } %>
             </div>
           </div>
         </div>
@@ -560,42 +569,53 @@
     </main>
 
     <!-- Nút lên đầu trang web -->
-    <button class="back-to-top" title="Lên đầu trang">
+    <button
+      class="back-to-top"
+      id="backToTopBtn"
+      title="Lên đầu trang"
+      type="button"
+      aria-label="Lên đầu trang"
+    >
       <i class="bi bi-arrow-up"></i>
     </button>
 
     <%- include ('footer') %> <%- include('javascript') %>
 
     <script>
-      // Add to cart function (giữ nguyên)
-      async function addToCart(sachId) {
-        try {
-          const taikhoanID = "<%= session.MaNguoiDung %>";
-          if (!taikhoanID) {
-            alert("Vui lòng đăng nhập để thêm sách vào giỏ hàng.");
-            window.location.href = "/dangnhap";
-            return;
-          }
+            // Add to cart function
+            async function addToCart(sachId) {
+              try {
+                // Kiểm tra session từ phần tử HTML thay vì sử dụng biến toàn cục
+                let taikhoanID = "";
+                <% if (typeof session !== "undefined" && session.MaNguoiDung) { %>
+                  taikhoanID = "<%= session.MaNguoiDung %>";
+                <% } %>
 
-          const response = await fetch(`/giohang/them/${sachId}`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+                if (!taikhoanID) {
+                  alert("Vui lòng đăng nhập để thêm sách vào giỏ hàng.");
+                  window.location.href = "/dangnhap";
+                  return;
+                }
 
-          const data = await response.json();
-          if (data.success) {
-            alert("Thêm sách vào giỏ hàng thành công!");
-            location.reload();
-          } else {
-            alert(data.message || "Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
-          }
-        } catch (error) {
-          console.error("Lỗi:", error);
-          alert("Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
-        }
-      }
+                const response = await fetch(`/giohang/them/${sachId}`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                  alert("Thêm sách vào giỏ hàng thành công!");
+                  location.reload();
+                } else {
+                  alert(data.message || "Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
+                }
+              } catch (error) {
+                console.error("Lỗi:", error);
+                alert("Có lỗi xảy ra khi thêm sách vào giỏ hàng.");
+              }
+            }
 
       document.addEventListener("DOMContentLoaded", function () {
         // Phần xử lý danh sách sách
@@ -606,74 +626,105 @@
         let currentPage = 1;
         let isLoading = false;
 
+        // Lấy dữ liệu sách từ backend
         try {
-          const booksData = `<%- JSON.stringify(sach || []) %>`;
-          allBooks = JSON.parse(booksData.replace(/&quot;/g, '"'));
+          // Chuyển đổi dữ liệu JSON từ EJS với xử lý mã đúng
+          const booksDataEscaped = `<%- JSON.stringify(sach || []) %>`;
+          const booksData = booksDataEscaped.replace(/&quot;/g, '"');
+          allBooks = JSON.parse(booksData);
+
+          // Hiển thị sách ban đầu (trang đầu tiên)
+          displayInitialBooks();
+
+          // Ẩn nút "Xem thêm" nếu không có đủ sách để phân trang
+          if (allBooks.length <= booksPerPage) {
+            if (loadMoreBtn) loadMoreBtn.style.display = "none";
+          }
         } catch (error) {
           console.error("Error parsing books data:", error);
-          return;
+          allBooks = []; // Đặt mảng rỗng nếu có lỗi
+        }
+
+        // Hiển thị sách ban đầu
+        function displayInitialBooks() {
+          if (!bookContainer) return;
+
+          // Xóa nội dung hiện tại
+          bookContainer.innerHTML = '';
+
+          // Hiển thị sách trang đầu tiên
+          const initialBooks = loadBooks(1);
+          if (initialBooks && initialBooks.length > 0) {
+            const booksHTML = initialBooks.map(book => generateBookHTML(book)).join("");
+            bookContainer.innerHTML = booksHTML;
+          } else {
+            // Hiển thị thông báo nếu không có sách
+            bookContainer.innerHTML = `
+              <div class="col-12 text-center py-5">
+                <h5 class="text-muted">Không có sách nào trong danh mục này</h5>
+              </div>
+            `;
+            if (loadMoreBtn) loadMoreBtn.style.display = "none";
+          }
         }
 
         function generateBookHTML(book) {
+          // Kiểm tra session cho nút thêm vào giỏ hàng
+          let addToCartBtn = '';
+          <% if (typeof session !== "undefined" && session.QuyenHan !== "admin") { %>
+            addToCartBtn = `
+              <button
+                class="btn btn-success btn-sm add-to-cart"
+                onclick="addToCart('${book._id}')"
+                title="Thêm vào giỏ hàng">
+                <i class="bi bi-cart-plus"></i>
+              </button>
+            `;
+          <% } %>
+
           return `
-        <div class="col">
-          <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden book-glass-card">
-            <img
-              src="/uploads/${book.HinhAnh || "null.png"}"
-              class="card-img book-img"
-              alt="${book.TieuDe}"
-              loading="lazy"
-              onerror="this.src='/uploads/null.png';"
-            />
-            <div class="book-info-glass w-100 px-3 py-2 position-absolute bottom-0 start-0">
-              <h5 class="card-title text-truncate mb-1 text-white">
-                ${book.TieuDe}
-              </h5>
-              <div class="d-flex justify-content-between align-items-center mb-1">
-                <span class="text-light small">
-                  <i class="bi bi-person"></i> ${book.TacGia}
-                </span>
-                <span class="badge bg-success fs-6 shadow-sm">
-                  ${Number(book.GiaBan).toLocaleString("vi-VN")} đ
-                </span>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <span class="text-warning small">
-                  <i class="bi bi-eye"></i> ${book.LuotXem || 0}
-                </span>
-                <div>
-                  <a href="/sach/sach_chitiet/${book._id}"
-                    class="btn btn-outline-light btn-sm me-1">
-                    <i class="bi bi-info-circle"></i> Chi tiết
-                  </a>
-                  ${
-                    typeof session !== "undefined" &&
-                    session.QuyenHan !== "admin"
-                      ? `<button
-                        class="btn btn-success btn-sm add-to-cart"
-                        onclick="addToCart('${book._id}')"
-                        title="Thêm vào giỏ hàng">
-                        <i class="bi bi-cart-plus"></i>
-                      </button>`
-                      : ""
-                  }
+            <div class="col">
+              <div class="card h-100 shadow-sm border-0 position-relative overflow-hidden book-glass-card">
+                <img
+                  src="/uploads/${book.HinhAnh || "null.png"}"
+                  class="card-img book-img"
+                  alt="${book.TieuDe}"
+                  loading="lazy"
+                  onerror="this.src='/uploads/null.png';"
+                />
+                <div class="book-info-glass w-100 px-3 py-2 position-absolute bottom-0 start-0">
+                  <h5 class="card-title text-truncate mb-1 text-white">
+                    ${book.TieuDe}
+                  </h5>
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <span class="text-light small">
+                      <i class="bi bi-person"></i> ${book.TacGia}
+                    </span>
+                    <span class="badge bg-success fs-6 shadow-sm">
+                      ${Number(book.GiaBan).toLocaleString("vi-VN")} đ
+                    </span>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="text-warning small">
+                      <i class="bi bi-eye"></i> ${book.LuotXem || 0}
+                    </span>
+                    <div>
+                      <a href="/sach/sach_chitiet/${book._id}"
+                        class="btn btn-outline-light btn-sm me-1">
+                        <i class="bi bi-info-circle"></i> Chi tiết
+                      </a>
+                      ${addToCartBtn}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>`;
+            </div>`;
         }
 
         function loadBooks(page) {
           const start = (page - 1) * booksPerPage;
-          return allBooks.slice(start, start + booksPerPage);
-        }
-
-        // Khởi tạo danh sách
-        if (bookContainer) {
-          bookContainer.innerHTML = loadBooks(1)
-            .map((book) => generateBookHTML(book))
-            .join("");
+          const end = start + booksPerPage;
+          return allBooks.slice(start, end);
         }
 
         // Xử lý nút Xem thêm
@@ -692,13 +743,15 @@
 
               await new Promise((resolve) => setTimeout(resolve, 300));
 
-              if (nextBooks.length > 0) {
-                bookContainer.insertAdjacentHTML(
-                  "beforeend",
-                  nextBooks.map((book) => generateBookHTML(book)).join("")
-                );
+              if (nextBooks && nextBooks.length > 0) {
+                // Thêm sách mới vào container
+                const newBooksHTML = nextBooks.map(book => generateBookHTML(book)).join("");
+                if (bookContainer) {
+                  bookContainer.insertAdjacentHTML("beforeend", newBooksHTML);
+                }
               }
 
+              // Ẩn nút nếu không còn sách để tải
               if (currentPage * booksPerPage >= allBooks.length) {
                 this.style.display = "none";
               }
@@ -713,106 +766,110 @@
           });
         }
 
-        // Lấy các phần tử nút lên đầu trang và lên đầu danh sách
-        const backToTopBtn = document.querySelector(".back-to-top");
-        const backToListTopBtn = document.querySelector(".back-to-list-top");
-        const bookListContainer = document.getElementById("bookListContainer");
+              // Lấy các phần tử nút lên đầu trang và lên đầu danh sách
+              const backToTopBtn = document.getElementById("backToTopBtn");
+              const backToListTopBtn = document.getElementById("backToListTopBtn");
+              const bookListContainer = document.getElementById("bookListContainer");
 
-        // Thêm tooltip cho nút lên đầu danh sách
-        if (backToListTopBtn) {
-          const tooltip = document.createElement("div");
-          tooltip.classList.add("top-btn-tooltip");
-          tooltip.textContent = "Lên đầu danh sách";
-          backToListTopBtn.appendChild(tooltip);
+              // Thêm tooltip cho nút lên đầu danh sách
+              if (backToListTopBtn) {
+                const tooltip = document.createElement("div");
+                tooltip.classList.add("top-btn-tooltip");
+                tooltip.textContent = "Lên đầu danh sách";
+                backToListTopBtn.appendChild(tooltip);
 
-          backToListTopBtn.addEventListener("mouseenter", () => {
-            tooltip.style.opacity = "1";
-            tooltip.style.transform = "translateY(-10px)";
-          });
+                backToListTopBtn.addEventListener("mouseenter", () => {
+                  tooltip.style.opacity = "1";
+                });
 
-          backToListTopBtn.addEventListener("mouseleave", () => {
-            tooltip.style.opacity = "0";
-            tooltip.style.transform = "translateY(0)";
-          });
-        }
-
-        // Hiển thị nút lên đầu trang khi cuộn trang
-        window.addEventListener("scroll", () => {
-          // Hiển thị nút khi cuộn > 200px
-          backToTopBtn.classList.toggle("show", window.scrollY > 200);
-        });
-
-        // Cải thiện function kiểm tra hiển thị nút lên đầu danh sách
-        function updateListTopButtonVisibility() {
-          if (bookListContainer && backToListTopBtn) {
-            if (bookListContainer.scrollTop > 150) {
-              backToListTopBtn.classList.add("show");
-              // Thêm hiệu ứng xuất hiện với animation
-              if (!backToListTopBtn.classList.contains("animated-in")) {
-                backToListTopBtn.classList.add("animated-in");
-                setTimeout(() => {
-                  backToListTopBtn.classList.remove("animated-in");
-                }, 500);
+                backToListTopBtn.addEventListener("mouseleave", () => {
+                  tooltip.style.opacity = "0";
+                });
               }
-            } else {
-              backToListTopBtn.classList.remove("show");
-            }
-          }
-        }
 
-        // Hiển thị nút lên đầu danh sách khi cuộn trong container danh sách
-        if (bookListContainer) {
-          bookListContainer.addEventListener(
-            "scroll",
-            updateListTopButtonVisibility
-          );
-          // Kiểm tra định kỳ vị trí cuộn để đảm bảo nút luôn hoạt động chính xác
-          setInterval(updateListTopButtonVisibility, 500);
-        }
+              // Hiển thị nút lên đầu trang khi cuộn trang
+              window.addEventListener("scroll", () => {
+                if (backToTopBtn) {
+                  // Hiển thị nút khi cuộn > 200px
+                  if (window.scrollY > 200) {
+                    backToTopBtn.classList.add("show");
+                  } else {
+                    backToTopBtn.classList.remove("show");
+                  }
+                }
+              });
 
-        // Xử lý click nút lên đầu trang
-        if (backToTopBtn) {
-          backToTopBtn.addEventListener("click", () => {
-            window.scrollTo({
-              top: 0,
-              behavior: "smooth",
+              // Cải thiện function kiểm tra hiển thị nút lên đầu danh sách
+              function updateListTopButtonVisibility() {
+                if (bookListContainer && backToListTopBtn) {
+                  if (bookListContainer.scrollTop > 150) {
+                    backToListTopBtn.classList.add("show");
+                    // Thêm hiệu ứng xuất hiện với animation
+                    if (!backToListTopBtn.classList.contains("animated-in")) {
+                      backToListTopBtn.classList.add("animated-in");
+                      setTimeout(() => {
+                        backToListTopBtn.classList.remove("animated-in");
+                      }, 500);
+                    }
+                  } else {
+                    backToListTopBtn.classList.remove("show");
+                  }
+                }
+              }
+
+              // Hiển thị nút lên đầu danh sách khi cuộn trong container danh sách
+              if (bookListContainer) {
+                bookListContainer.addEventListener(
+                  "scroll",
+                  updateListTopButtonVisibility
+                );
+                // Kiểm tra định kỳ vị trí cuộn để đảm bảo nút luôn hoạt động chính xác
+                setInterval(updateListTopButtonVisibility, 500);
+              }
+
+              // Xử lý click nút lên đầu trang
+              if (backToTopBtn) {
+                backToTopBtn.addEventListener("click", () => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                });
+              }
+
+              // Cải thiện sự kiện click nút lên đầu danh sách
+              if (backToListTopBtn && bookListContainer) {
+                backToListTopBtn.addEventListener("click", (e) => {
+                  e.preventDefault();
+                  // Thêm hiệu ứng nhấp nháy khi click
+                  backToListTopBtn.classList.add("clicked");
+                  setTimeout(() => {
+                    backToListTopBtn.classList.remove("clicked");
+                  }, 300);
+
+                  // Cuộn mượt lên đầu danh sách
+                  bookListContainer.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                });
+              }
+
+              // Hiệu ứng hover cho các nút
+              [backToTopBtn, backToListTopBtn].forEach((btn) => {
+                if (btn) {
+                  btn.addEventListener("mouseenter", () => {
+                    const icon = btn.querySelector("i");
+                    if (icon) icon.style.transform = "translateY(-3px)";
+                  });
+
+                  btn.addEventListener("mouseleave", () => {
+                    const icon = btn.querySelector("i");
+                    if (icon) icon.style.transform = "translateY(0)";
+                  });
+                }
+              });
             });
-          });
-        }
-
-        // Cải thiện sự kiện click nút lên đầu danh sách
-        if (backToListTopBtn && bookListContainer) {
-          backToListTopBtn.addEventListener("click", (e) => {
-            e.preventDefault();
-            // Thêm hiệu ứng nhấp nháy khi click
-            backToListTopBtn.classList.add("clicked");
-            setTimeout(() => {
-              backToListTopBtn.classList.remove("clicked");
-            }, 300);
-
-            // Cuộn mượt lên đầu danh sách
-            bookListContainer.scrollTo({
-              top: 0,
-              behavior: "smooth",
-            });
-          });
-        }
-
-        // Hiệu ứng hover cho các nút
-        [backToTopBtn, backToListTopBtn].forEach((btn) => {
-          if (btn) {
-            btn.addEventListener("mouseenter", () => {
-              const icon = btn.querySelector("i");
-              if (icon) icon.style.transform = "translateY(-3px)";
-            });
-
-            btn.addEventListener("mouseleave", () => {
-              const icon = btn.querySelector("i");
-              if (icon) icon.style.transform = "translateY(0)";
-            });
-          }
-        });
-      });
     </script>
   </body>
 </html>

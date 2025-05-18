@@ -3,7 +3,8 @@ var router = express.Router();
 var firstImage = require("../modules/firstimage");
 var ChuDe = require("../models/chude");
 var Sach = require("../models/sach");
-const { isUser, isAdmin } = require("../middlewares/auth");
+const { isUser, isAuth } = require("../middlewares/auth");
+const session = require("express-session");
 
 // GET: Trang chủ
 router.get("/", async (req, res) => {
@@ -19,7 +20,7 @@ router.get("/", async (req, res) => {
       .exec();
 
     res.render("index", {
-      title: "Trang chủ",
+      title: "Tất cả sách",
       sach: sach,
       chuyenmuc: cd,
       xemnhieunhat: xnn,
@@ -32,7 +33,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET: Thuê sách
-router.get("/thuesach", isUser, async (req, res) => {
+router.get("/thuesach", isAuth, async (req, res) => {
   var sach = await Sach.find();
   res.render("thuesach", {
     sach: sach,
@@ -77,18 +78,17 @@ router.get("/sach/chude/:id", async (req, res) => {
       .limit(3)
       .populate("ChuDe")
       .exec();
-    var sach = await Sach.find({ ChuDe: id })
-      .populate("ChuDe")
-      .sort({ NamXuatBan: -1 })
-      .limit(8)
-      .exec();
 
+    // Get books by category - keep this filtering
+    var sach = await Sach.find({ ChuDe: id }).populate("ChuDe").exec();
+    var c = sach.length;
     res.render("sach_chude", {
-      title: "Sách theo Chủ đề: " + tenChuDe,
+      title: "Tìm thấy " + c + " kết quả cho " + tenChuDe,
       sach: sach,
       chude: cd,
       chuyenmuc: cm,
       xemnhieunhat: xnn,
+      firstImage: firstImage,
     });
   } catch (error) {
     console.error("Error loading books by category:", error);
@@ -110,13 +110,15 @@ router.post("/timkiem", async (req, res) => {
     var sachs = await Sach.find({
       TieuDe: { $regex: tukhoa, $options: "i" }, // Tìm kiếm tiêu đề chứa từ khóa
     }).populate("ChuDe"); // Lấy thông tin chủ đề liên quan
-
+    var count = sachs.length;
     res.render("sach_timkiem", {
-      title: "Kết quả tìm kiếm: " + tukhoa,
+      title: "Tìm thấy " + count + " kết quả cho " + tukhoa,
       sach: sachs,
       tukhoa: tukhoa,
       chuyenmuc: chuyenmuc, // Truyền danh sách chủ đề vào view
       xemnhieunhat: xnn, // Truyền danh sách sách xem nhiều nhất vào view
+      firstImage: firstImage,
+      session: req.session,
     });
   } catch (error) {
     console.error("Lỗi khi tìm kiếm sách:", error);

@@ -23,8 +23,7 @@
       <div class="card mt-3">
         <div class="card-header"><%= title %></div>
         <div class="card-body table-responsive">
-          <% if(session['QuyenHan'] !== "Khách hàng" &&
-          session['isAuthenticated'] === true ){ %>
+          <% if(session['QuyenHan'] === "admin" ){ %>
           <a href="/sach/them" class="btn btn-primary mb-2"
             ><i class="bi bi-plus-lg"></i> Thêm sách</a
           >
