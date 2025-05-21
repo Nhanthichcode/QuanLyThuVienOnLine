@@ -3,7 +3,8 @@ var router = express.Router();
 var firstImage = require("../modules/firstimage");
 var ChuDe = require("../models/chude");
 var Sach = require("../models/sach");
-const { isUser, isAuth } = require("../middlewares/auth");
+var HoaDon = require("../models/hoadon");
+const { isUser, isAuth, isAdmin } = require("../middlewares/auth");
 const session = require("express-session");
 
 // GET: Trang chủ
@@ -29,6 +30,37 @@ router.get("/", async (req, res) => {
   } catch (error) {
     console.error("Error loading homepage:", error);
     res.redirect("/error");
+  }
+});
+
+//GET: quản lý hóa đơn
+router.get("/hoadon", isAdmin, async (req, res) => {
+  try {
+    const hoaDons = await HoaDon.find()
+      .populate("taiKhoanID", "HoVaTen") // Chỉ lấy trường HoVaTen từ mô hình TaiKhoan
+      .populate("danhSachSanPham.sachId", "TieuDe GiaBan"); // Chỉ lấy trường TieuDe và GiaBan từ mô hình Sach
+
+    const hoaDonDaTa = hoaDons.map((hoaDon) => ({
+      id: hoaDon._id,
+      tenNguoiDung: hoaDon.taiKhoanID.HoVaTen,
+      tongTien: hoaDon.tongTien,
+      ngayTao: hoaDon.ngayTao,
+      danhSachSanPham: hoaDon.danhSachSanPham.map((item) => ({
+        sachId: item.sachId._id,
+        tieuDe: item.sachId.TieuDe,
+        giaBan: item.sachId.GiaBan,
+        soLuong: item.soLuong,
+        thanhTien: item.soLuong * item.sachId.GiaBan,
+      })),
+    }));
+
+    res.render("hoadon", {
+      hoaDons: hoaDonDaTa,
+      title: "Tất cả hóa đơn",
+    });
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách hóa đơn:", error);
+    res.status(500).send("Đã xảy ra lỗi khi lấy danh sách hóa đơn.");
   }
 });
 

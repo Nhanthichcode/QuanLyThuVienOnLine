@@ -15,6 +15,7 @@ var khuVucRouter = require("./routers/khuvuc");
 var sachRouter = require("./routers/sach");
 var taikhoanRouter = require("./routers/taikhoan");
 var gioHangRouter = require("./routers/giohang");
+var hoaDonRouter = require("./routers/hoadon");
 
 var uri =
   "mongodb+srv://nhanlx151:nhan778899@cluster0.75thtei.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -72,6 +73,7 @@ app.use("/khuvuc", khuVucRouter);
 app.use("/sach", sachRouter);
 app.use("/taikhoan", taikhoanRouter);
 app.use("/giohang", gioHangRouter);
+app.use("/hoadon", hoaDonRouter);
 
 app.listen(3003, () => {
   console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3003");

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+  </head>
+  <body>
+    <h1>Chi tiết hóa đơn</h1>
+    <p><strong>Người dùng:</strong> <%= tenNguoiDung %></p>
+    <p>
+      <strong>Ngày tạo:</strong> <%= hoaDon.ngayTao.toLocaleDateString("vi-VN")
+      %>
+    </p>
+    <p>
+      <strong>Tổng tiền:</strong> <%= hoaDon.tongTien.toLocaleString("vi-VN", {
+      style: "currency", currency: "VND" }) %>
+    </p>
+
+    <h2>Danh sách sản phẩm</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Tên sách</th>
+          <th>Số lượng</th>
+          <th>Giá bán</th>
+          <th>Thành tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% hoaDon.danhSachSanPham.forEach(item => { %>
+        <tr>
+          <td><%= item.sachId.TieuDe %></td>
+          <td><%= item.soLuong %></td>
+          <td>
+            <%= item.giaBan.toLocaleString("vi-VN", { style: "currency",
+            currency: "VND" }) %>
+          </td>
+          <td>
+            <%= (item.soLuong * item.giaBan).toLocaleString("vi-VN", { style:
+            "currency", currency: "VND" }) %>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </body>
+</html>
