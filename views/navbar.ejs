@@ -6,7 +6,7 @@
 
   /* Navbar container */
   .navbar-custom {
-    background: linear-gradient(90deg, #e99696 0%, #f09819 55%, #8167a3 100%);
+    background: linear-gradient(90deg, #e99696 0%, #f09819 55%, #8167a370 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 15px;
     padding: 0.5rem 1rem;
@@ -362,7 +362,7 @@
             </li>
             <li>
               <a class="dropdown-item" href="/hoadon">
-                <i class="bi bi-bill"></i> Hóa Đơn
+                <i class="bi bi-receipt"></i> Hóa Đơn
               </a>
               <hr class="dropdown-divider" />
             </li>
@@ -376,6 +376,17 @@
               </a>
             </li>
             <li><hr class="dropdown-divider" /></li>
+            <% if(session.QuyenHan != "admin") { %>
+            <li>
+              <a
+                class="dropdown-item"
+                href="/hoadon/cuatoi/<%= session.MaNguoiDung %>"
+              >
+                <i class="bi bi-person-badge"></i> Lịch sử mua hàng
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <% } %>
             <li>
               <a class="dropdown-item" href="/dangxuat">
                 <i class="bi bi-box-arrow-right"></i> Đăng xuất

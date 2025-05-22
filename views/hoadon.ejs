@@ -26,7 +26,9 @@
           <table class="table table-bordered table-hover table-sm mb-0">
             <thead>
               <tr>
+                <% if(session && session.QuyenHan === 'admin' ){ %>
                 <th>Khách hàng</th>
+                <% } %>
                 <th>Tổng tiền</th>
                 <th>Ngày lập</th>
                 <th>Thao tác</th>
@@ -35,17 +37,47 @@
             <tbody>
               <% hoaDons.forEach(hoaDon => { %>
               <tr>
+                <% if(session && session.QuyenHan === 'admin' ){ %>
                 <td><%= hoaDon.tenNguoiDung %></td>
-                <td><%= hoaDon.tongTien %></td>
-                <td>
+                <% } %>
+                <td align="right">
+                  <%= hoaDon.tongTien.toLocaleString("vi-VN", { style:
+                  "currency", currency: "VND" }) %>
+                </td>
+                <td align="right">
                   <%= new Date(hoaDon.ngayTao).toLocaleDateString("vi-VN") %>
                 </td>
-                <td>
-                  <a href="/hoadon/chitiet/<%= hoaDon.id %>"
-                    >Xem thêm <%= hoaDon.id %></a
+                <td align="center">
+                  <a
+                    href="/hoadon/chitiet/<%= hoaDon.id %>"
+                    class="btn btn-info btn-sm"
+                    title="Xem chi tiết"
                   >
-                  | <a href="/hoadon/<%= hoaDon._id %>/sua">Sửa</a> |
-                  <a href="/hoadon/xoa/<%= hoaDon.id %>">Xóa</a>
+                    <i class="bi bi-eye"></i> Xem
+                  </a>
+                  <% if(session && session.QuyenHan === 'admin' ){ %>
+                  <a
+                    href="/hoadon/sua/<%= hoaDon.id %>"
+                    class="btn btn-warning btn-sm ms-1"
+                    title="Sửa ngày lập"
+                  >
+                    <i class="bi bi-pencil-square"></i> Sửa
+                  </a>
+                  <form
+                    action="/hoadon/xoa/<%= hoaDon.id %>"
+                    method="POST"
+                    class="d-inline"
+                    onsubmit="return confirm('Bạn có chắc muốn xóa hóa đơn này?');"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-danger btn-sm ms-1"
+                      title="Xóa hóa đơn"
+                    >
+                      <i class="bi bi-trash"></i> Xóa
+                    </button>
+                    <% } %>
+                  </form>
                 </td>
               </tr>
               <% }) %>

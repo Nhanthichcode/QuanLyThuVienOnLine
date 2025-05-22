@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var bcrypt = require("bcryptjs");
 var TaiKhoan = require("../models/taikhoan");
-
+const { isAdmin } = require("../middlewares/auth");
 // GET: Đăng ký
 router.get("/dangky", async (req, res) => {
   res.render("dangky", {
@@ -146,38 +146,8 @@ router.get("/dangxuat", async (req, res) => {
   }
 });
 
-// GET: Quên mật khẩu
-router.get("/quenmatkhau", async (req, res) => {
-  res.render("quenmatkhau", {
-    title: "Quên mật khẩu",
-  });
-});
-// POST: Quên mật khẩu
-router.post("/quenmatkhau", async (req, res) => {
-  var taikhoan = await TaiKhoan.findOne({
-    Email: req.body.Email,
-  }).exec();
-  if (taikhoan) {
-    // Gửi email với mật khẩu mới
-    var newPassword = Math.random().toString(36).slice(-8);
-    var salt = bcrypt.genSaltSync(10);
-    taikhoan.MatKhau = bcrypt.hashSync(newPassword, salt);
-    await taikhoan.save();
-    // Gửi email với mật khẩu mới
-    req.session.success = "Đã gửi mật khẩu mới vào email của bạn.";
-    res.render("success", {
-      title: "Thành công",
-      message: "Đã gửi mật khẩu mới vào email của bạn.",
-      redirectUrl: "/",
-    });
-  } else {
-    req.session.error = "Email không tồn tại.";
-    res.redirect("/error");
-  }
-});
-
 // GET: Đăng ký
-router.get("/admin", async (req, res) => {
+router.get("/admin", isAdmin, async (req, res) => {
   res.render("admin", {
     title: "Trang quản trị",
   });

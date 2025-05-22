@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
 });
 
 //GET: quản lý hóa đơn
-router.get("/hoadon", isAdmin, async (req, res) => {
+router.get("/hoadon", isAuth, async (req, res) => {
   try {
     const hoaDons = await HoaDon.find()
       .populate("taiKhoanID", "HoVaTen") // Chỉ lấy trường HoVaTen từ mô hình TaiKhoan

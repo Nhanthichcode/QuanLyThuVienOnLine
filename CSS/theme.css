@@ -79,7 +79,6 @@
 }
 
 .dark-theme-mode .form-control:focus {
-  background-color: #e78e77;
   border-color: #4a90e2;
   box-shadow: 0 0 0 0.2rem rgba(74, 144, 226, 0.25);
 }
