@@ -634,10 +634,9 @@
 
         // Lấy dữ liệu sách từ backend
         try {
-          // Chuyển đổi dữ liệu JSON từ EJS với xử lý mã đúng
-          const booksDataEscaped = `<%- JSON.stringify(sach || []) %>`;
-          const booksData = booksDataEscaped.replace(/&quot;/g, '"');
-          allBooks = JSON.parse(booksData);
+         // Dữ liệu từ EJS - không escape để giữ đúng JSON
+      const booksData = <%- JSON.stringify(sach || []) %>;
+      allBooks = booksData;
         } catch (error) {
           console.error("Error parsing books data:", error);
           allBooks = []; // Đặt mảng rỗng nếu có lỗi
