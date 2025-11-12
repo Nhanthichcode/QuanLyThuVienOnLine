@@ -18,7 +18,7 @@ var gioHangRouter = require("./routers/giohang");
 var hoaDonRouter = require("./routers/hoadon");
 
 var uri =
-  "mongodb+srv://nhanlx151:nhan778899@cluster0.75thtei.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  "mongodb+srv://nhanlx154_db_user:pCO10H4Awfp3DMwW@cluster0.vggaq2k.mongodb.net/?appName=Cluster0";
 mongoose.connect(uri).catch((err) => console.log(err));
 
 // Cấu hình thư mục tĩnh cho uploads trong middleware
