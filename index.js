@@ -11,15 +11,14 @@ var path = require("path");
 var chudeRouter = require("./routers/chude");
 var dangNhapRouter = require("./routers/dangnhap");
 var indexRouter = require("./routers/index");
-var khuVucRouter = require("./routers/khuvuc");
 var sachRouter = require("./routers/sach");
 var taikhoanRouter = require("./routers/taikhoan");
 var gioHangRouter = require("./routers/giohang");
 var hoaDonRouter = require("./routers/hoadon");
 
 var uri =
+  process.env.MONGO_URI ||
   "mongodb+srv://nhanlx154_db_user:pCO10H4Awfp3DMwW@cluster0.vggaq2k.mongodb.net/?appName=Cluster0";
-mongoose.connect(uri).catch((err) => console.log(err));
 
 // Cấu hình thư mục tĩnh cho uploads trong middleware
 app.use(
@@ -69,12 +68,20 @@ app.use((req, res, next) => {
 app.use("/", indexRouter);
 app.use("/", dangNhapRouter);
 app.use("/chude", chudeRouter);
-app.use("/khuvuc", khuVucRouter);
 app.use("/sach", sachRouter);
 app.use("/taikhoan", taikhoanRouter);
 app.use("/giohang", gioHangRouter);
 app.use("/hoadon", hoaDonRouter);
 
-app.listen(3003, () => {
-  console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3003");
-});
+mongoose
+  .connect(uri) // removed deprecated options
+  .then(() => {
+    console.log("MongoDB connected");
+    app.listen(3003, () => {
+      console.log("Lê Trí Nhàn đang fixBug ở http://127.0.0.1:3003");
+    });
+  })
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });

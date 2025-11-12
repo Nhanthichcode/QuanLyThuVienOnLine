@@ -41,22 +41,6 @@
               />
             </div>
 
-<!-- Khu vưc -->
-            <div class="mb-3">
-              <label for="MaKhuVuc" class="form-label">Khu Vực</label>
-              <select class="form-select" id="MaKhuVuc" name="MaKhuVuc" required>
-                <option value="">-- Chọn --</option>
-                <% khuvuc.forEach(kv => { %>
-                  <option
-                    value="<%= kv._id %>"
-                    <%= chude.MaKhuVuc == kv._id ? 'selected' : '' %>
-                  >
-                    <%= kv.TenKhuVuc %>
-                  </option>
-                <% }); %>
-              </select>
-            </div>  
-
             <div class="mb-3">
               <label for="MoTa" class="form-label">Mô tả</label>
               <textarea
@@ -65,7 +49,9 @@
                 name="MoTa"
                 rows="3"
                 required
-              ><%= chude.MoTa %></textarea>
+              >
+                <%= chude.MoTa %></textarea
+              >
             </div>
 
             <button type="submit" class="btn btn-success">

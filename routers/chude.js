@@ -1,13 +1,13 @@
 var express = require("express");
 var router = express.Router();
 var ChuDe = require("../models/chude");
-var KhuVuc = require("../models/khuvuc");
+
 const { isAdmin } = require("../middlewares/auth");
 
 // GET: Danh sách chủ đề
 router.get("/", isAdmin, async (req, res) => {
   try {
-    var cd = await ChuDe.find().populate("KhuVuc");
+    var cd = await ChuDe.find();
     res.render("chude", {
       title: "Danh sách chủ đề",
       chude: cd,
@@ -23,11 +23,9 @@ router.get("/", isAdmin, async (req, res) => {
 
 // GET: Thêm chủ đề
 router.get("/them", isAdmin, async (req, res) => {
-  var kv = await KhuVuc.find();
   var cd = await ChuDe.find();
   res.render("chude_them", {
     title: "Thêm chủ đề",
-    khuvuc: kv,
     chude: cd,
   });
 });
@@ -54,7 +52,6 @@ router.post("/them", isAdmin, async (req, res) => {
 
     var data = {
       TenChuDe: req.body.TenChuDe.trim(),
-      KhuVuc: req.body.MaKhuVuc,
       MoTa: req.body.MoTa,
     };
     await ChuDe.create(data);
@@ -88,7 +85,6 @@ router.get("/sua/:id", isAdmin, async (req, res) => {
     res.render("chude_sua", {
       title: "Sửa chủ đề",
       chude: cd,
-      khuvuc: kv,
     });
   } catch (error) {
     console.error("Lỗi khi lấy chủ đề để sửa:", error);
@@ -113,7 +109,6 @@ router.post("/sua/:id", isAdmin, async (req, res) => {
 
     var data = {
       TenChuDe: req.body.TenChuDe.trim(),
-      KhuVuc: req.body.MaKhuVuc,
       MoTa: req.body.MoTa,
     };
     await ChuDe.findByIdAndUpdate(id, data);

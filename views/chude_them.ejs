@@ -37,17 +37,7 @@
                 id="TenChuDe"
                 name="TenChuDe"
                 required
-              />
-            <!-- khu vực -->
-            <div class="mb-3">
-                <label for="MaKhuVuc" class="form-label">Khu Vực</label>
-                <select class="form-select" id="MaKhuVuc" name="MaKhuVuc" required>
-                    <option value="">-- Chọn --</option>
-                    <% khuvuc.forEach(kv => { %>
-                        <option value="<%= kv._id %>"><%= kv.TenKhuVuc %></option>
-                    <% }); %>
-                </select>
-            </div>
+              />            
 
             <div class="mb-3">
               <label for="MoTa" class="form-label">Mô tả</label>
