@@ -14,11 +14,7 @@ router.get("/", async (req, res) => {
     // Sắp xếp sách theo NamXuatBan giảm dần và DanhGia giảm dần
     var sach = await Sach.find();
 
-    var xnn = await Sach.find()
-      .sort({ LuotXem: -1 })
-      .limit(3)
-      .populate("ChuDe")
-      .exec();
+    var xnn = await Sach.find().sort({ LuotXem: -1 }).limit(3).exec();
 
     res.render("index", {
       title: "Tất cả sách",
